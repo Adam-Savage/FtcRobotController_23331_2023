@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Season.Pipeline;
+package org.firstinspires.ftc.teamcode.Season.Subsystems.TeamElementDetection.Pipeline;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
