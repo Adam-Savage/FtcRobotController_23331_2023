@@ -23,7 +23,6 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.sequencesegment.Traject
 import org.firstinspires.ftc.teamcode.trajectorysequence.sequencesegment.TurnSegment;
 import org.firstinspires.ftc.teamcode.trajectorysequence.sequencesegment.WaitSegment;
 import org.firstinspires.ftc.teamcode.util.DashboardUtil;
-import org.firstinspires.ftc.teamcode.util.LogFiles;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -211,10 +210,10 @@ public class TrajectorySequenceRunner {
         }
 
         if (targetPose != null) {
-            LogFiles.record(
+            /*LogFiles.record(
                     targetPose, poseEstimate, voltage,
                     lastDriveEncPositions, lastDriveEncVels, lastTrackingEncPositions, lastTrackingEncVels
-            );
+            );*/
         }
 
         packet.put("x", poseEstimate.getX());
