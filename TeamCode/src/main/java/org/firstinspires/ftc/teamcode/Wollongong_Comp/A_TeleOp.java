@@ -32,12 +32,6 @@ public class A_TeleOp extends LinearOpMode {
 
 //---------------------------------------------------------------------------
 
-    //Initialise Servo State
-    public static boolean ClawOpen = false;
-    public static boolean WristOut = false;
-
-//---------------------------------------------------------------------------
-
     //Servo Set Points
     public static double WristSetPtIn = 0.38;
     public static double WristSetPtOut = 0.67;
@@ -102,6 +96,12 @@ public class A_TeleOp extends LinearOpMode {
         frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
+//---------------------------------------------------------------------------
+
+        //Initialise Servo State
+        boolean ClawOpen = false;
+        boolean WristOut = false;
 
 //---------------------------------------------------------------------------
 
@@ -237,10 +237,10 @@ public class A_TeleOp extends LinearOpMode {
             //Lift Control
 
             //Limit Switch Encoder Reset
-//            if (limitSwitch.getState() == false) {
-//                // Limit switch is pressed, reset the motor encoder
-//                Lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//            }
+            if ((limitSwitch.getState() == false) && (Lift.getCurrentPosition() != 0)) {
+                // Limit switch is pressed, reset the motor encoder
+                Lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            }
 
             //PIDF Loop
             Lift_controller.setPID(Lift_p, Lift_i, Lift_d);
@@ -250,6 +250,8 @@ public class A_TeleOp extends LinearOpMode {
 
             double Lift_power = Lift_pid + Lift_ff;
             Lift.setPower(Lift_power);
+            Lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
 
 
             //A Button Pressed
@@ -294,6 +296,7 @@ public class A_TeleOp extends LinearOpMode {
             else if (gamepad1.dpad_down) {
                 Climb_target = ClimbSetPtDown;
             }
+            Climb.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 //            //Dpad LEFT Pressed
 //            if (gamepad1.dpad_left && gamepad1.left_bumper) {
