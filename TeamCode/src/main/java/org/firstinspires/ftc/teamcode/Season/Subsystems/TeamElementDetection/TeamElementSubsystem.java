@@ -19,7 +19,7 @@ public class TeamElementSubsystem {
     int zone = 1;
 
     public TeamElementSubsystem(HardwareMap hardwareMap){
-        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"));
+        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "c270"));
         splitAveragePipeline = new SplitAveragePipeline();
 
         camera.setPipeline(splitAveragePipeline);
