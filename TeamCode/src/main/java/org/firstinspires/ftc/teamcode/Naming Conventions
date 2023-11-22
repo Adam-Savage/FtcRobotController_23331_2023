@@ -1,0 +1,102 @@
+Drive motors and ports - as viewed from back of robot
+
+Control Hub
+
+Motors
+Leftfront: Port 0
+Rightfront: Port 1
+Lift: Port 2
+
+Servos
+Drone: Port 5
+
+
+Expansion Hub
+
+Motors
+Leftback: Port 0
+Rightback: Port 1
+Climb: Port 2
+
+Servos
+Wrist: Port 5
+Claw: Port 4
+
+Digital In
+LiftLimitSwitch: Port 0/1
+
+
+Gamepad Controls List
+Left Stick XY - Drive
+Right Stick X -
+Right Stick Y - Lift
+Dpad UpDown - Climber
+Dpad Left - Swap Wrist
+Dpad Right - Swap Claw
+Button X - Claw Grip
+Button YAB - Lift Positions
+Triggers LR - Strafe
+Bumper L - Drone
+Bumper R - Intake
+
+Subsystem 1 - Drive
+4x Motors with 16:1
+    Drive - POV (Left Stick XY)
+    Strafing - Slow (Triggers LR)
+
+Subsystem 2 - Lift
+1x Motor uP
+    Set Points - Scoring & Intake (Buttons YAB)
+    Small Adjustments (Right Stick Y)
+
+Subsystem 3 - Claw
+2x Servo
+    Toggle Grip (Button X)
+1x Position Servo
+    Swap Order (Dpad Right)
+
+Subsystem 4 - Wrist
+1x Position Servo
+    Set Points - Scoring & Intake (Dpad Left)
+
+Subsystem 5 - Climber
+1x Motor uP
+    Extend (Dpad Up)
+    Retract (Dpad Down)
+
+Subsystem 6 - Drone
+1x Small Position Servo
+    Single Release - Time Locked (Bumper Left)
+
+Subsystem 7 - Intake
+Misc Things
+    On/Off - Hold (Bumper Right)
+
+
+
+
+OLD LAYOUT
+
+Control Hub
+
+Motors
+Leftfront - Port:3
+Rightfront - Port:2
+Leftback - Port:1
+Rightback - Port:0
+
+Servos
+Left - Port:0
+Right - Port:1
+Position - Port:2
+Wrist - Port:3
+Drone - Port:4
+
+Digital Channel
+1. limit
+
+Expansion Hub
+
+Motors
+Lift - Port:0
+Climb - Port:1
