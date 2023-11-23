@@ -23,9 +23,9 @@ public class A_TeleOp extends LinearOpMode {
 
     //Motor Set Points
     public static int LiftSetPtIntake = 0;
-    public static int LiftSetPtLvl1 = 600;
-    public static int LiftSetPtLvl2 = 1000;
-    public static int LiftSetPtLvl3 = 1650;
+    public static int LiftSetPtLvl1 = -600;
+    public static int LiftSetPtLvl2 = -1000;
+    public static int LiftSetPtLvl3 = -1650;
 
     public static int ClimbSetPtUp = -2150;
     public static int ClimbSetPtDown = -20;
@@ -297,51 +297,6 @@ public class A_TeleOp extends LinearOpMode {
                 Climb_target = ClimbSetPtDown;
             }
             Climb.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-//            //Dpad LEFT Pressed
-//            if (gamepad1.dpad_left && gamepad1.left_bumper) {
-//            if (gamepad1.dpad_left) {
-//                //Open Servo
-//                Hook.setPosition(HookSetPtOpen);
-//                //Wait for servo to open
-//                sleep(500);
-//                //Set Target Position and Power
-//                Climb.setTargetPosition(ClimbSetPtUp);
-//                Climb.setPower(ClimbSpeedUp);
-//                //Set Run Mode
-//                Climb.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                //Wait for Target Position
-//                while (opModeIsActive() && Climb.isBusy()) {
-//                    telemetry.addLine("Climb Going Up");
-//                    telemetry.addData("Motor Position", Climb.getCurrentPosition());
-//                    telemetry.update();
-//                }
-//
-//                //Reset Power
-//                Climb.setPower(0);
-//                //Reset Run Mode
-//                Climb.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//            }
-
-
-//            //Dpad Down Pressed
-//            else if (gamepad1.dpad_down) {
-//                //Set Target Position and Power
-//                Climb.setTargetPosition(ClimbSetPtDown);
-//                Climb.setPower(ClimbSpeedDown);
-//                //Set Run Mode
-//                Climb.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                //Wait for Target Position
-//                while (opModeIsActive() && Climb.isBusy()) {
-//                    telemetry.addLine("Climb Going Down");
-//                    telemetry.addData("Motor Position", Climb.getCurrentPosition());
-//                    telemetry.update();
-//                }
-//                //Reset Power
-//                Climb.setPower(0);
-//                //Reset Run Mode
-//                Climb.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//            }
 
 //---------------------------------------------------------------------------
 

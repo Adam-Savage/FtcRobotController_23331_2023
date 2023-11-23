@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.Season;
 
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -10,10 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import android.util.Size;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
 import org.firstinspires.ftc.vision.VisionPortal;
 
 import java.util.Locale;
@@ -21,7 +16,7 @@ import java.util.Locale;
 @Config
 @Disabled
 @TeleOp
-public class C_Camera extends LinearOpMode {
+public class Q_Camera extends LinearOpMode {
 
 //---------------------------------------------------------------------------
 
