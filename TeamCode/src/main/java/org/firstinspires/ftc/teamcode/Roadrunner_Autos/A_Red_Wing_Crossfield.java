@@ -7,13 +7,12 @@ import org.firstinspires.ftc.teamcode.Season.Subsystems.TeamElementDetection.Tea
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @Autonomous
-public class Blue_Backboard extends LinearOpMode{
+public class A_Red_Wing_Crossfield extends LinearOpMode{
     public int element_zone = 1;
 
     private TeamElementSubsystem teamElementDetection=null;
@@ -32,7 +31,7 @@ public class Blue_Backboard extends LinearOpMode{
 
         HardwareStart();
 
-        String curAlliance = "blue";
+        String curAlliance = "red";
 
         while (!opModeIsActive() && !isStopRequested()){
             element_zone = teamElementDetection.elementDetection(telemetry);
@@ -83,7 +82,7 @@ public class Blue_Backboard extends LinearOpMode{
         }
 
         else if (element_zone == 3) {
-            telemetry.addLine("Zone 3 selected");
+            telemetry.addLine("Zone 3 Detected");
             telemetry.update();
 
             TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
@@ -101,35 +100,15 @@ public class Blue_Backboard extends LinearOpMode{
             drive.followTrajectorySequence(trajectory);
         }
 
-        //Drive to Backboard
-        telemetry.addLine("To Backboard");
+        //Drive along Wall to Park
+        telemetry.addLine("To Park");
         telemetry.update();
 
-        if (element_zone == 1) {
-            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
-                    .splineTo(new Vector2d(18, 30), Math.toRadians(90))
-                    .strafeRight(5)
-                    .forward(5)
-                    .build();
-            drive.followTrajectorySequence(trajectory);
-        }
-
-        else if (element_zone == 2) {
-            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
-                    .splineTo(new Vector2d(18, 30), Math.toRadians(90))
-                    .strafeRight(13)
-                    .forward(5)
-                    .build();
-            drive.followTrajectorySequence(trajectory);
-        }
-
-        else if (element_zone == 3) {
-                TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
-                        .splineTo(new Vector2d(18, 30), Math.toRadians(90))
-                        .strafeRight(20)
-                        .forward(5)
-                        .build();
-                drive.followTrajectorySequence(trajectory);
-        }
+        TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
+                .forward(5)
+                .turn(Math.toRadians(-90))
+                .forward(85)
+                .build();
+        drive.followTrajectorySequence(trajectory);
     }
 }

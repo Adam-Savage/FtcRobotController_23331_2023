@@ -7,13 +7,12 @@ import org.firstinspires.ftc.teamcode.Season.Subsystems.TeamElementDetection.Tea
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @Autonomous
-public class Purple_Pixel extends LinearOpMode{
+public class A_Red_Wing extends LinearOpMode{
     public int element_zone = 1;
 
     private TeamElementSubsystem teamElementDetection=null;
@@ -41,7 +40,9 @@ public class Purple_Pixel extends LinearOpMode{
 
             telemetry.addData("Current Alliance Selected : ", curAlliance.toUpperCase());
             telemetry.addData("Zone", element_zone);
+
             telemetry.update();
+
         }
         telemetry.addData("Object", "Passed waitForStart");
         telemetry.update();
@@ -57,45 +58,19 @@ public class Purple_Pixel extends LinearOpMode{
         if (isStopRequested()) return;
 
         //Camera Detection and Purple Pixel
-        //Code for Red Backboard or Blue Wing, other two reversed
         if (element_zone == 1) {
-            telemetry.addLine("Zone 1 selected");
+            telemetry.addLine("Zone 1 Detected");
             telemetry.update();
 
             TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
-//                    .forward(25)
-//                    .turn(Math.toRadians(90))
-//                    .forward(5)
-//                    .forward(-5)
-//                    .turn(Math.toRadians(-90))
-//                    .forward(-13)
-
-                    .forward(10)
-
-//                    .splineTo(new Vector2d(22,14), Math.toRadians(45))
-//                    .splineTo(new Vector2d(0,0), Math.toRadians(0))
-
-//                    .strafeLeft(5)
-//                    .forward(5)
-//                    .strafeLeft(5)
-//                    .forward(5)
-//                    .splineToConstantHeading(new Vector2d(0,0), Math.toRadians(-30))
-
-                    .turn(Math.toRadians(15))
-                    .forward(5)
-                    .turn(Math.toRadians(15))
-                    .forward(10)
-
-                    .forward(-10)
-                    .turn(Math.toRadians(-30))
+                    .splineToConstantHeading(new Vector2d(22,13), Math.toRadians(-15))
                     .splineToConstantHeading(new Vector2d(0,0), Math.toRadians(0))
-
                     .build();
             drive.followTrajectorySequence(trajectory);
         }
 
         else if (element_zone == 2) {
-            telemetry.addLine("Zone 2 selected");
+            telemetry.addLine("Zone 2 Detected");
             telemetry.update();
 
             TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
@@ -107,14 +82,24 @@ public class Purple_Pixel extends LinearOpMode{
         }
 
         else if (element_zone == 3) {
-            telemetry.addLine("Zone 3 selected");
+            telemetry.addLine("Zone 3 Detected");
             telemetry.update();
 
             TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
-                    .splineToConstantHeading(new Vector2d(22,-13), Math.toRadians(-15))
+                    .forward(10)
+
+                    .turn(Math.toRadians(-15))
+                    .forward(5)
+                    .turn(Math.toRadians(-15))
+                    .forward(10)
+
+                    .forward(-10)
+                    .turn(Math.toRadians(30))
                     .splineToConstantHeading(new Vector2d(0,0), Math.toRadians(0))
                     .build();
             drive.followTrajectorySequence(trajectory);
         }
+
+        //End of Auto
     }
 }

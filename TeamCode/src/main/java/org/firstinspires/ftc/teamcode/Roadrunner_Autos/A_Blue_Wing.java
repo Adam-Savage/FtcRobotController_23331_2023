@@ -7,13 +7,12 @@ import org.firstinspires.ftc.teamcode.Season.Subsystems.TeamElementDetection.Tea
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @Autonomous
-public class Blue_Wing extends LinearOpMode{
+public class A_Blue_Wing extends LinearOpMode{
     public int element_zone = 1;
 
     private TeamElementSubsystem teamElementDetection=null;

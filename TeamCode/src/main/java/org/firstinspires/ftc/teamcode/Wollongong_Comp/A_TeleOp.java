@@ -22,9 +22,10 @@ public class A_TeleOp extends LinearOpMode {
 //---------------------------------------------------------------------------
 
     //Motor Set Points
-    public static int LiftSetPtIntake = 0;
+    public static int LiftSetPtIntake = 30;
+        //used to be 10 with actobotics lift
     public static int LiftSetPtLvl1 = 600;
-    public static int LiftSetPtLvl2 = 1000;
+    public static int LiftSetPtLvl2 = 1400;
     public static int LiftSetPtLvl3 = 2200;
 
     public static int ClimbSetPtUp = -2150;
@@ -35,7 +36,7 @@ public class A_TeleOp extends LinearOpMode {
     //Servo Set Points
     public static double WristSetPtIn = 0.38;
     public static double WristSetPtOut = 0.67;
-    public static double WristSetPtScore = 0.48;
+    public static double WristSetPtScore = 0.44;
 
     public static double ClawSetPtClosed = 0.97;
     public static double ClawSetPtOpen = 0.88;
@@ -46,8 +47,8 @@ public class A_TeleOp extends LinearOpMode {
     public static double DroneSetPtClosed = 1;
     public static double DroneSetPtOpen = 0;
 
-    public static double HookSetPtClosed = 0.05;
-    public static double HookSetPtOpen = 0.25;
+    public static double HookSetPtClosed = 0.5;
+    public static double HookSetPtOpen = 0.35;
 
 //---------------------------------------------------------------------------
 

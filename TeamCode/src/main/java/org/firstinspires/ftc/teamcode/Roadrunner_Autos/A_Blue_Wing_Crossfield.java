@@ -7,13 +7,12 @@ import org.firstinspires.ftc.teamcode.Season.Subsystems.TeamElementDetection.Tea
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @Autonomous
-public class Red_Wing_Crossfield extends LinearOpMode{
+public class A_Blue_Wing_Crossfield extends LinearOpMode{
     public int element_zone = 1;
 
     private TeamElementSubsystem teamElementDetection=null;
@@ -32,7 +31,7 @@ public class Red_Wing_Crossfield extends LinearOpMode{
 
         HardwareStart();
 
-        String curAlliance = "red";
+        String curAlliance = "blue";
 
         while (!opModeIsActive() && !isStopRequested()){
             element_zone = teamElementDetection.elementDetection(telemetry);
@@ -64,7 +63,15 @@ public class Red_Wing_Crossfield extends LinearOpMode{
             telemetry.update();
 
             TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
-                    .splineToConstantHeading(new Vector2d(22,13), Math.toRadians(-15))
+                    .forward(10)
+
+                    .turn(Math.toRadians(15))
+                    .forward(5)
+                    .turn(Math.toRadians(15))
+                    .forward(10)
+
+                    .forward(-10)
+                    .turn(Math.toRadians(-30))
                     .splineToConstantHeading(new Vector2d(0,0), Math.toRadians(0))
                     .build();
             drive.followTrajectorySequence(trajectory);
@@ -87,15 +94,7 @@ public class Red_Wing_Crossfield extends LinearOpMode{
             telemetry.update();
 
             TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
-                    .forward(10)
-
-                    .turn(Math.toRadians(-15))
-                    .forward(5)
-                    .turn(Math.toRadians(-15))
-                    .forward(10)
-
-                    .forward(-10)
-                    .turn(Math.toRadians(30))
+                    .splineToConstantHeading(new Vector2d(22,-13), Math.toRadians(-15))
                     .splineToConstantHeading(new Vector2d(0,0), Math.toRadians(0))
                     .build();
             drive.followTrajectorySequence(trajectory);
@@ -107,7 +106,7 @@ public class Red_Wing_Crossfield extends LinearOpMode{
 
         TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
                 .forward(5)
-                .turn(Math.toRadians(-90))
+                .turn(Math.toRadians(90))
                 .forward(85)
                 .build();
         drive.followTrajectorySequence(trajectory);
