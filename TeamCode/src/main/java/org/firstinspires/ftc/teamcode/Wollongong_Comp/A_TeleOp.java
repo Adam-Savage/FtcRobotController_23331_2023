@@ -23,9 +23,9 @@ public class A_TeleOp extends LinearOpMode {
 
     //Motor Set Points
     public static int LiftSetPtIntake = 0;
-    public static int LiftSetPtLvl1 = -600;
-    public static int LiftSetPtLvl2 = -1000;
-    public static int LiftSetPtLvl3 = -1650;
+    public static int LiftSetPtLvl1 = 600;
+    public static int LiftSetPtLvl2 = 1000;
+    public static int LiftSetPtLvl3 = 2200;
 
     public static int ClimbSetPtUp = -2150;
     public static int ClimbSetPtDown = -20;

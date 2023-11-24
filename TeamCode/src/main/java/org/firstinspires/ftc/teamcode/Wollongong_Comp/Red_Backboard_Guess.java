@@ -3,20 +3,18 @@ package org.firstinspires.ftc.teamcode.Season;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Disabled
 @Config
 @Autonomous
-public class Blue_Backboard extends LinearOpMode {
+public class Red_Backboard_Guess extends LinearOpMode {
 
 //---------------------------------------------------------------------------
 
@@ -128,10 +126,10 @@ public class Blue_Backboard extends LinearOpMode {
 
 //---------------------------------------------------------------------------
 
-        //Blue Backboard Side
+        //Red Backboard Side
         encoderDrive(DRIVE_SPEED, 15, 15, 5.0);
         encoderDrive(DRIVE_SPEED, -6, -6, 5.0);
-        encoderDrive(TURN_SPEED, -8.2, 8.2, 5.0);
+        encoderDrive(TURN_SPEED, 8.2, -8.2, 5.0);
         encoderDrive(DRIVE_SPEED, 21, 21, 5.0);
 
         liftMove(-1, 300);
@@ -156,9 +154,9 @@ public class Blue_Backboard extends LinearOpMode {
 
 //---------------------------------------------------------------------------
 
-    public void encoderDrive(double speed,
-                             double leftInches, double rightInches,
-                             double timeoutS) {
+    public void encoderDrive ( double speed,
+                               double leftInches, double rightInches,
+                               double timeoutS){
         int newLeftTarget;
         int newRightTarget;
 
@@ -215,10 +213,10 @@ public class Blue_Backboard extends LinearOpMode {
         }
     }
 
-    public void liftMove(double speed, double height) {
+    public void liftMove ( double speed, double height){
 
         if (opModeIsActive()) {
-            Lift.setTargetPosition((int)height);
+            Lift.setTargetPosition((int) height);
             Lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             Lift.setPower(speed);
             while (opModeIsActive() && Lift.isBusy()) {

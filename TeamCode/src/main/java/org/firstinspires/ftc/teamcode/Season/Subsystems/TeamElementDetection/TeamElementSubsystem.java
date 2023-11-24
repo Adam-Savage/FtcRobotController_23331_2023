@@ -52,5 +52,9 @@ public class TeamElementSubsystem {
     public void toggleAverageZone(){
         splitAveragePipeline.toggleAverageZonePipe();
     }
+
+    public void closePipeline() {
+        camera.stopStreaming();
+    }
 }
 

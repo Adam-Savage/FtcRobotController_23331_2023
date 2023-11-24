@@ -88,10 +88,10 @@ public class DriveConstants {
      * You are free to raise this on your own if you would like. It is best determined through experimentation.
      
      */
-    public static double MAX_VEL = 55.33995570959121;
-    public static double MAX_ACCEL = 57.19292464206345;
-    public static double MAX_ANG_VEL = Math.toRadians(247.31420377358492);
-    public static double MAX_ANG_ACCEL = Math.toRadians(247.31420377358492);
+    public static double MAX_VEL = 15;
+    public static double MAX_ACCEL = 15;
+    public static double MAX_ANG_VEL = Math.toRadians(180);
+    public static double MAX_ANG_ACCEL = Math.toRadians(180);
 
 
     public static RevHubOrientationOnRobot.LogoFacingDirection LOGO_FACING_DIR =

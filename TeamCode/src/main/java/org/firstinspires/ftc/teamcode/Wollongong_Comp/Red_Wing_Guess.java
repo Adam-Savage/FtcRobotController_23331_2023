@@ -3,20 +3,18 @@ package org.firstinspires.ftc.teamcode.Season;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Disabled
 @Config
 @Autonomous
-public class Red_Backboard extends LinearOpMode {
+public class Red_Wing_Guess extends LinearOpMode {
 
 //---------------------------------------------------------------------------
 
@@ -128,106 +126,92 @@ public class Red_Backboard extends LinearOpMode {
 
 //---------------------------------------------------------------------------
 
-        //Red Backboard Side
+        //Red Wing Side
         encoderDrive(DRIVE_SPEED, 15, 15, 5.0);
         encoderDrive(DRIVE_SPEED, -6, -6, 5.0);
-        encoderDrive(TURN_SPEED, 8.2, -8.2, 5.0);
-        encoderDrive(DRIVE_SPEED, 21, 21, 5.0);
-
-        liftMove(-1, 300);
-        sleep(500);
-        Wrist.setPosition(WristSetPtScore);
-        sleep(500);
-        Claw.setPosition(ClawSetPtOpen);
-        sleep(500);
-        Claw.setPosition(ClawSetPtClosed);
-        Wrist.setPosition(WristSetPtIn);
-        liftMove(1, -30);
-
-        encoderDrive(DRIVE_SPEED, -1, -1, 5.0);
 
 //---------------------------------------------------------------------------
 
-        telemetry.addData("Path", "Complete");
-        telemetry.addData("Lift Position", Lift.getCurrentPosition());
-        telemetry.update();
-        sleep(1000);  // pause to display final telemetry message.
-    }
+            telemetry.addData("Path", "Complete");
+            telemetry.addData("Lift Position", Lift.getCurrentPosition());
+            telemetry.update();
+            sleep(1000);  // pause to display final telemetry message.
+        }
 
 //---------------------------------------------------------------------------
 
-    public void encoderDrive ( double speed,
-                               double leftInches, double rightInches,
-                               double timeoutS){
-        int newLeftTarget;
-        int newRightTarget;
+        public void encoderDrive ( double speed,
+        double leftInches, double rightInches,
+        double timeoutS){
+            int newLeftTarget;
+            int newRightTarget;
 
-        // Ensure that the opmode is still active
-        if (opModeIsActive()) {
+            // Ensure that the opmode is still active
+            if (opModeIsActive()) {
 
-            // Determine new target position, and pass to motor controller
-            newLeftTarget = backLeft.getCurrentPosition() + (int) (leftInches * COUNTS_PER_INCH);
-            newRightTarget = backRight.getCurrentPosition() + (int) (rightInches * COUNTS_PER_INCH);
+                // Determine new target position, and pass to motor controller
+                newLeftTarget = backLeft.getCurrentPosition() + (int) (leftInches * COUNTS_PER_INCH);
+                newRightTarget = backRight.getCurrentPosition() + (int) (rightInches * COUNTS_PER_INCH);
 
-            backLeft.setTargetPosition(newLeftTarget);
-            frontLeft.setTargetPosition(newLeftTarget);
-            backRight.setTargetPosition(newRightTarget);
-            frontRight.setTargetPosition(newRightTarget);
+                backLeft.setTargetPosition(newLeftTarget);
+                frontLeft.setTargetPosition(newLeftTarget);
+                backRight.setTargetPosition(newRightTarget);
+                frontRight.setTargetPosition(newRightTarget);
 
-            // Turn On RUN_TO_POSITION
-            backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                // Turn On RUN_TO_POSITION
+                backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-            // reset the timeout time and start motion.
-            runtime.reset();
-            backLeft.setPower(Math.abs(speed));
-            frontLeft.setPower(Math.abs(speed));
-            backRight.setPower(Math.abs(speed));
-            frontRight.setPower(Math.abs(speed));
+                // reset the timeout time and start motion.
+                runtime.reset();
+                backLeft.setPower(Math.abs(speed));
+                frontLeft.setPower(Math.abs(speed));
+                backRight.setPower(Math.abs(speed));
+                frontRight.setPower(Math.abs(speed));
 
-            while (opModeIsActive() &&
-                    (runtime.seconds() < timeoutS) &&
-                    (backLeft.isBusy() && backRight.isBusy())) {
+                while (opModeIsActive() &&
+                        (runtime.seconds() < timeoutS) &&
+                        (backLeft.isBusy() && backRight.isBusy())) {
 
-                // Display it for the driver.
-                telemetry.addData("Running to", " %7d :%7d", newLeftTarget, newRightTarget);
-                telemetry.addData("Currently at", " at %7d :%7d",
-                        backLeft.getCurrentPosition(), backRight.getCurrentPosition());
-                telemetry.update();
+                    // Display it for the driver.
+                    telemetry.addData("Running to", " %7d :%7d", newLeftTarget, newRightTarget);
+                    telemetry.addData("Currently at", " at %7d :%7d",
+                            backLeft.getCurrentPosition(), backRight.getCurrentPosition());
+                    telemetry.update();
+                }
+
+                // Stop all motion;
+                backLeft.setPower(0);
+                frontLeft.setPower(0);
+                backRight.setPower(0);
+                frontRight.setPower(0);
+
+                // Turn off RUN_TO_POSITION
+                backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+                // optional pause after each move.
+                sleep(250);
             }
+        }
 
-            // Stop all motion;
-            backLeft.setPower(0);
-            frontLeft.setPower(0);
-            backRight.setPower(0);
-            frontRight.setPower(0);
+        public void liftMove ( double speed, double height){
 
-            // Turn off RUN_TO_POSITION
-            backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-            // optional pause after each move.
-            sleep(250);
+            if (opModeIsActive()) {
+                Lift.setTargetPosition((int) height);
+                Lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                Lift.setPower(speed);
+                while (opModeIsActive() && Lift.isBusy()) {
+                    telemetry.addData("Running to", height);
+                    telemetry.addData("Currently at", Lift.getCurrentPosition());
+                    telemetry.update();
+                }
+                Lift.setPower(0);
+                Lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            }
         }
     }
-
-    public void liftMove ( double speed, double height){
-
-        if (opModeIsActive()) {
-            Lift.setTargetPosition((int) height);
-            Lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            Lift.setPower(speed);
-            while (opModeIsActive() && Lift.isBusy()) {
-                telemetry.addData("Running to", height);
-                telemetry.addData("Currently at", Lift.getCurrentPosition());
-                telemetry.update();
-            }
-            Lift.setPower(0);
-            Lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        }
-    }
-}

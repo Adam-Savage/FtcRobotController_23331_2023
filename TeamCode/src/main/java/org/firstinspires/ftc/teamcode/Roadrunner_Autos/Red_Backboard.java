@@ -10,6 +10,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @Autonomous
 public class Red_Backboard extends LinearOpMode{
@@ -53,6 +54,8 @@ public class Red_Backboard extends LinearOpMode{
 
         waitForStart();
 
+        teamElementDetection.closePipeline();
+
         if (isStopRequested()) return;
 
         //Camera Detection and Purple Pixel
@@ -60,43 +63,73 @@ public class Red_Backboard extends LinearOpMode{
             telemetry.addLine("Zone 1 Detected");
             telemetry.update();
 
-            Trajectory trajectory1 = drive.trajectoryBuilder(new Pose2d())
+            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
                     .forward(10)
+
+                    .turn(Math.toRadians(15))
+                    .forward(5)
+                    .turn(Math.toRadians(15))
+                    .forward(10)
+
+                    .forward(-10)
+                    .turn(Math.toRadians(-30))
+                    .splineToConstantHeading(new Vector2d(0,0), Math.toRadians(0))
                     .build();
-            drive.followTrajectory(trajectory1);
+            drive.followTrajectorySequence(trajectory);
+
         }
 
         else if (element_zone == 2) {
             telemetry.addLine("Zone 2 Detected");
             telemetry.update();
 
-            Trajectory trajectory1 = drive.trajectoryBuilder(new Pose2d())
-                    .forward(10)
+            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
+                    .forward(30.5)
+                    .waitSeconds(0.5)
+                    .forward(-30.5)
                     .build();
-            drive.followTrajectory(trajectory1);
+            drive.followTrajectorySequence(trajectory);
         }
 
         else if (element_zone == 3) {
             telemetry.addLine("Zone 3 Detected");
             telemetry.update();
 
-            Trajectory trajectory1 = drive.trajectoryBuilder(new Pose2d())
-                    .forward(10)
+            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
+                    .splineToConstantHeading(new Vector2d(22,-13), Math.toRadians(-15))
+                    .splineToConstantHeading(new Vector2d(0,0), Math.toRadians(0))
                     .build();
-            drive.followTrajectory(trajectory1);
+            drive.followTrajectorySequence(trajectory);
         }
 
         //Drive to Backboard
-        Trajectory trajectory1 = drive.trajectoryBuilder(new Pose2d())
-                .splineTo(new Vector2d(20, 30), 90)
-                .build();
-        drive.followTrajectory(trajectory1);
+        telemetry.addLine("To Backboard");
+        telemetry.update();
 
-        sleep(500);
+        if (element_zone == 1) {
+            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
+                    .splineTo(new Vector2d(18, -30), Math.toRadians(-90))
+                    .strafeLeft(20)
+                    .forward(5)
+                    .build();
+            drive.followTrajectorySequence(trajectory);
+        }
 
-        Trajectory trajectory2 = drive.trajectoryBuilder(new Pose2d())
-                .splineTo(new Vector2d(30, 50), 0)
-                .build();
-        drive.followTrajectory(trajectory2);
+        else if (element_zone == 2) {
+            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
+                    .splineTo(new Vector2d(18, -30), Math.toRadians(-90))
+                    .strafeLeft(13)
+                    .forward(5)
+                    .build();
+            drive.followTrajectorySequence(trajectory);
+        }
+        else if (element_zone == 3) {
+            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
+                    .splineTo(new Vector2d(18, -30), Math.toRadians(-90))
+                    .strafeLeft(5)
+                    .forward(5)
+                    .build();
+            drive.followTrajectorySequence(trajectory);
+        }
     }
 }
