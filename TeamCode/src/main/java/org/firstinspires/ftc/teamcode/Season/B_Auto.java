@@ -202,7 +202,7 @@ public class B_Auto extends LinearOpMode {
         encoderDrive(TURN_SPEED, -8.2, 8.2, 5.0);
         encoderDrive(DRIVE_SPEED, 21, 21, 5.0);
 
-        liftMove(-1, 300);
+        liftMove(-1, LiftSetPtLvl1);
         sleep(500);
         Wrist.setPosition(WristSetPtScore);
         sleep(500);
@@ -210,7 +210,7 @@ public class B_Auto extends LinearOpMode {
         sleep(500);
         Claw.setPosition(ClawSetPtClosed);
         Wrist.setPosition(WristSetPtIn);
-        liftMove(1, -30);
+        liftMove(1, LiftSetPtIntake);
 
         encoderDrive(DRIVE_SPEED, -1, -1, 5.0);
 

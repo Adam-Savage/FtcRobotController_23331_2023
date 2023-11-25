@@ -63,7 +63,7 @@ public class A_Blue_Wing extends LinearOpMode{
             telemetry.update();
 
             TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
-                    .forward(10)
+                    .forward(14)
 
                     .turn(Math.toRadians(15))
                     .forward(5)
@@ -94,7 +94,7 @@ public class A_Blue_Wing extends LinearOpMode{
             telemetry.update();
 
             TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
-                    .splineToConstantHeading(new Vector2d(22,-13), Math.toRadians(-15))
+                    .splineToConstantHeading(new Vector2d(22,-11), Math.toRadians(-15))
                     .splineToConstantHeading(new Vector2d(0,0), Math.toRadians(0))
                     .build();
             drive.followTrajectorySequence(trajectory);

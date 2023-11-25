@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.Season.Subsystems.TeamElementDetection.Tea
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
@@ -17,11 +18,24 @@ public class A_Blue_Wing_Crossfield extends LinearOpMode{
 
     private TeamElementSubsystem teamElementDetection=null;
 
+    public static double WristSetPtIn = 0.38;
+    public static double WristSetPtScore = 0.44;
+    public static double ClawSetPtSingleSmall = 1;
+    public static double ClawSetPtOpen = 0.88;
+
     public void HardwareStart() {
         telemetry.addData("Object Creation", "Start");
         telemetry.update();
 
         teamElementDetection = new TeamElementSubsystem(hardwareMap);
+
+        //Servo Declaration
+        Servo Wrist = hardwareMap.servo.get("Wrist");
+        Servo Claw = hardwareMap.servo.get("Claw");
+
+        //Initialise Servos
+        Claw.setPosition(ClawSetPtSingleSmall);
+        Wrist.setPosition(WristSetPtIn);
 
         telemetry.addData("Object Creation", "Done");
         telemetry.update();
@@ -50,6 +64,9 @@ public class A_Blue_Wing_Crossfield extends LinearOpMode{
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
+        //Servo Declaration
+        Servo Wrist = hardwareMap.servo.get("Wrist");
+        Servo Claw = hardwareMap.servo.get("Claw");
 
         waitForStart();
 
@@ -63,7 +80,7 @@ public class A_Blue_Wing_Crossfield extends LinearOpMode{
             telemetry.update();
 
             TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
-                    .forward(10)
+                    .forward(14)
 
                     .turn(Math.toRadians(15))
                     .forward(5)
@@ -94,11 +111,14 @@ public class A_Blue_Wing_Crossfield extends LinearOpMode{
             telemetry.update();
 
             TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
-                    .splineToConstantHeading(new Vector2d(22,-13), Math.toRadians(-15))
+                    .splineToConstantHeading(new Vector2d(22,-11), Math.toRadians(-15))
                     .splineToConstantHeading(new Vector2d(0,0), Math.toRadians(0))
                     .build();
             drive.followTrajectorySequence(trajectory);
         }
+
+        //Wait to drive along wall
+        sleep(100);
 
         //Drive along Wall to Park
         telemetry.addLine("To Park");
@@ -107,8 +127,14 @@ public class A_Blue_Wing_Crossfield extends LinearOpMode{
         TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
                 .forward(5)
                 .turn(Math.toRadians(90))
-                .forward(85)
+                .forward(90)
                 .build();
         drive.followTrajectorySequence(trajectory);
+
+        //Put down Yellow
+        Wrist.setPosition(WristSetPtScore);
+        sleep(500);
+        Claw.setPosition(ClawSetPtOpen);
+        sleep(500);
     }
 }

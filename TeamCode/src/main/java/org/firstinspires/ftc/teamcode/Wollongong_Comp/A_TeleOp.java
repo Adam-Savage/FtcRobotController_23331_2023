@@ -38,9 +38,9 @@ public class A_TeleOp extends LinearOpMode {
     public static double WristSetPtOut = 0.67;
     public static double WristSetPtScore = 0.44;
 
-    public static double ClawSetPtClosed = 0.97;
-    public static double ClawSetPtOpen = 0.88;
-    public static double ClawSetPtSingleSmall = 1;
+    public static double ClawSetPtClosed = 0.88;
+    public static double ClawSetPtOpen = 0.8;
+    public static double ClawSetPtSingleSmall = 0.94;
     public static double ClawSetPtSingleWide = 0.8;
     public static double ClawSetPtOpenSingleWide = 0.75;
 
@@ -355,7 +355,8 @@ public class A_TeleOp extends LinearOpMode {
 //---------------------------------------------------------------------------
 
             //Auto Claw Toggle
-            if (gamepad1.dpad_right && Lift.getCurrentPosition() < 100) {
+//            if (gamepad1.dpad_right && Lift.getCurrentPosition() < 100) {
+            if (gamepad1.right_trigger > 0.1) {
                 Claw.setPosition(ClawSetPtOpen);
                 ClawOpen = true;
                 Wrist.setPosition(WristSetPtOut);
@@ -372,22 +373,22 @@ public class A_TeleOp extends LinearOpMode {
                 //Wrist In
             }
 
-            if (gamepad1.dpad_left) {
-                Claw.setPosition(ClawSetPtOpenSingleWide);
-                ClawOpen = true;
-                Wrist.setPosition(WristSetPtOut);
-                WristOut = true;
-                //Wrist Out
-                sleep(WristSleepDownSmall);
-                Claw.setPosition(ClawSetPtSingleWide);
-                ClawOpen = false;
-                //pick up pixel
-                sleep(WristSleepUpSmall);
-                //wait for claw to close
-                Wrist.setPosition(WristSetPtIn);
-                WristOut = false;
-                //Wrist In
-            }
+//            if (gamepad1.dpad_left) {
+//                Claw.setPosition(ClawSetPtOpenSingleWide);
+//                ClawOpen = true;
+//                Wrist.setPosition(WristSetPtOut);
+//                WristOut = true;
+//                //Wrist Out
+//                sleep(WristSleepDownSmall);
+//                Claw.setPosition(ClawSetPtSingleWide);
+//                ClawOpen = false;
+//                //pick up pixel
+//                sleep(WristSleepUpSmall);
+//                //wait for claw to close
+//                Wrist.setPosition(WristSetPtIn);
+//                WristOut = false;
+//                //Wrist In
+//            }
 
 //---------------------------------------------------------------------------
 
