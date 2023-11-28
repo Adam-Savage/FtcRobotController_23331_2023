@@ -11,7 +11,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
-@Autonomous
+@Autonomous (preselectTeleOp = "A_TeleOp_Syd")
 public class A_Blue_Wing extends LinearOpMode{
     public int element_zone = 1;
 

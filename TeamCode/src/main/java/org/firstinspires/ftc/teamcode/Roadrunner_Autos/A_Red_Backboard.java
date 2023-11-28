@@ -13,12 +13,11 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
-@Autonomous
+@Autonomous (preselectTeleOp = "A_TeleOp_Syd")
 public class A_Red_Backboard extends LinearOpMode{
     public int element_zone = 1;
 
     private TeamElementSubsystem teamElementDetection=null;
-
 
     public static int LiftSetPtLvl1 = 300;
     public static double WristSetPtIn = 0.38;

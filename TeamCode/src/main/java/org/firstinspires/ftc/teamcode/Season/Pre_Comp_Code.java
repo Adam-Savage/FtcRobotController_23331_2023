@@ -17,7 +17,7 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 @Config
 @Disabled
 @TeleOp
-public class A_CompCode extends LinearOpMode {
+public class Pre_Comp_Code extends LinearOpMode {
 
 //---------------------------------------------------------------------------
 

@@ -8,7 +8,8 @@ Rightfront: Port 1
 Lift: Port 2
 
 Servos
-Drone: Port 5
+Hook: Port 0
+Drone: Port 1
 
 
 Expansion Hub
@@ -23,7 +24,8 @@ Wrist: Port 5
 Claw: Port 4
 
 Digital In
-LiftLimitSwitch: Port 0/1
+LiftLimitSwitch: Port 0/1 - (1)
+ClimbLimitSwitch: Port 2/3 - (3)
 
 
 Gamepad Controls List

@@ -4,7 +4,6 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.controller.PIDController;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -16,16 +15,14 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
-@Disabled
 @Config
 @TeleOp
-public class A_TeleOp extends LinearOpMode {
+public class A_TeleOp_Syd extends LinearOpMode {
 
 //---------------------------------------------------------------------------
 
     //Motor Set Points
     public static int LiftSetPtIntake = 30;
-        //used to be 10 with actobotics lift
     public static int LiftSetPtLvl1 = 600;
     public static int LiftSetPtLvl2 = 1400;
     public static int LiftSetPtLvl3 = 2200;
@@ -37,7 +34,7 @@ public class A_TeleOp extends LinearOpMode {
 
     //Servo Set Points
     public static double WristSetPtIn = 0.38;
-    public static double WristSetPtOut = 0.67;
+    public static double WristSetPtOut = 0.64;
     public static double WristSetPtScore = 0.44;
 
     public static double ClawSetPtClosed = 0.88;
@@ -53,13 +50,13 @@ public class A_TeleOp extends LinearOpMode {
 //---------------------------------------------------------------------------
 
     //Lift PIDF Variables
-    private PIDController Lift_controller;
+    public PIDController Lift_controller;
     public static double Lift_p = 0.004, Lift_i = 0.001, Lift_d = 0.0001;
     public static double Lift_f = 0.0001;
     public static int Lift_target = 0;
 
     //Climb PIDF Variables
-    private PIDController Climb_controller;
+    public PIDController Climb_controller;
     public static double Climb_p = 0.005, Climb_i = 0.02, Climb_d = 0;
     public static double Climb_f = 0;
     public static int Climb_target = 0;
@@ -90,20 +87,12 @@ public class A_TeleOp extends LinearOpMode {
         DcMotor backLeftMotor = hardwareMap.dcMotor.get("Leftback");
         DcMotor frontRightMotor = hardwareMap.dcMotor.get("Rightfront");
         DcMotor backRightMotor = hardwareMap.dcMotor.get("Rightback");
-        DcMotor Lift = hardwareMap.dcMotor.get("Lift");
-        DcMotor Climb = hardwareMap.dcMotor.get("Climb");
 
         //Motor Reverse
         frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-
-//---------------------------------------------------------------------------
-
-        //Initialise Servo State
-        boolean ClawOpen = false;
-        boolean WristOut = false;
 
 //---------------------------------------------------------------------------
 
@@ -122,6 +111,10 @@ public class A_TeleOp extends LinearOpMode {
 
 //---------------------------------------------------------------------------
 
+        //Motor Declaration
+        DcMotor Lift = hardwareMap.dcMotor.get("Lift");
+        DcMotor Climb = hardwareMap.dcMotor.get("Climb");
+
         //Encoder Mode
         Lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Climb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -129,6 +122,24 @@ public class A_TeleOp extends LinearOpMode {
         //Enable Break
         Climb.setZeroPowerBehavior(ZeroPowerBehavior.BRAKE);
         Lift.setZeroPowerBehavior(ZeroPowerBehavior.BRAKE);
+
+//---------------------------------------------------------------------------
+
+        //PIDF Setup
+        Lift_controller = new PIDController(Lift_p, Lift_i, Lift_d);
+        Climb_controller = new PIDController(Climb_p, Climb_i, Climb_d);
+
+        //Limit Switch Setup
+        LiftLimitSwitch = hardwareMap.digitalChannel.get("LiftLimitSwitch");
+        LiftLimitSwitch.setMode(DigitalChannel.Mode.INPUT);
+        ClimbLimitSwitch = hardwareMap.digitalChannel.get("ClimbLimitSwitch");
+        ClimbLimitSwitch.setMode(DigitalChannel.Mode.INPUT);
+
+//---------------------------------------------------------------------------
+
+        //Initialise Servo State
+        boolean ClawOpen = false;
+        boolean WristOut = false;
 
 //---------------------------------------------------------------------------
 
@@ -147,22 +158,16 @@ public class A_TeleOp extends LinearOpMode {
 //---------------------------------------------------------------------------
 
         //Track Previous State of Buttons
-        //Claw Control
-        boolean previousRBumperButtonState = false;
+
         //Wrist Control
         boolean previousXButtonState = false;
-
-//---------------------------------------------------------------------------
-
-        //PIDF Setup
-        Lift_controller = new PIDController(Lift_p, Lift_i, Lift_d);
-        Climb_controller = new PIDController(Climb_p, Climb_i, Climb_d);
-
-        //Limit Switch Setup
-        LiftLimitSwitch = hardwareMap.digitalChannel.get("LiftLimitSwitch");
-        LiftLimitSwitch.setMode(DigitalChannel.Mode.INPUT);
-        ClimbLimitSwitch = hardwareMap.digitalChannel.get("ClimbLimitSwitch");
-        ClimbLimitSwitch.setMode(DigitalChannel.Mode.INPUT);
+        boolean currentXButtonState;
+        //2 Pixel Control
+        double previousLTriggerState = 0;
+        double currentLTriggerState;
+        //1 Pixel Control
+        double previousRTriggerState = 0;
+        double currentRTriggerState;
 
 //---------------------------------------------------------------------------
 
@@ -184,20 +189,25 @@ public class A_TeleOp extends LinearOpMode {
 //---------------------------------------------------------------------------
 
             //Initialise Buttons
-            //Claw Control
-            boolean currentRBumperButtonState = gamepad1.right_bumper;
+
             //Wrist Control
-            boolean currentXButtonState = gamepad1.x;
+            currentXButtonState = gamepad1.x;
+            //2 Pixel Control
+            currentLTriggerState = gamepad1.left_trigger;
+            //1 Pixel Control
+            currentRTriggerState = gamepad1.right_trigger;
 
 //---------------------------------------------------------------------------
 
             //Drive Control
+
             //Slow Driving
             if (gamepad1.left_bumper) {
                 LeftStickY = -gamepad1.left_stick_y * 0.2;
                 LeftStickX = gamepad1.left_stick_x * 0.2;
                 RX = gamepad1.right_stick_x * 0.3;
             }
+
             //Normal Driving
             else {
                 LeftStickY = -gamepad1.left_stick_y;
@@ -205,7 +215,10 @@ public class A_TeleOp extends LinearOpMode {
                 RX = gamepad1.right_stick_x * 0.8;
             }
 
+//---------------------------------------------------------------------------
+
             //Field Centric Drive
+
             //Reset IMU when START Pressed
             if (gamepad1.options) {
                 imu.resetYaw();
@@ -239,10 +252,11 @@ public class A_TeleOp extends LinearOpMode {
             //Lift Control
 
             //Limit Switch Encoder Reset
-            if ((LiftLimitSwitch.getState() == false) && (Lift.getCurrentPosition() != 0)) {
+            if ((!LiftLimitSwitch.getState()) && (Lift.getCurrentPosition() != 0)) {
                 // Limit switch is pressed, reset the motor encoder
                 Lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             }
+
 
             //PIDF Loop
             Lift_controller.setPID(Lift_p, Lift_i, Lift_d);
@@ -260,11 +274,13 @@ public class A_TeleOp extends LinearOpMode {
                 Wrist.setPosition(WristSetPtScore);
                 Lift_target = LiftSetPtLvl1;
             }
+
             //B Button Pressed
             else if (gamepad1.b) {
                 Wrist.setPosition(WristSetPtScore);
                 Lift_target =LiftSetPtLvl2;
             }
+
             //Y Button Pressed
             else if (gamepad1.y) {
                 Wrist.setPosition(WristSetPtScore);
@@ -276,10 +292,11 @@ public class A_TeleOp extends LinearOpMode {
             //Climb Control
 
             //Limit Switch Encoder Reset
-            if ((ClimbLimitSwitch.getState() == false) && (Climb.getCurrentPosition() != 0)) {
+            if ((!ClimbLimitSwitch.getState()) && (Climb.getCurrentPosition() != 0)) {
                 // Limit switch is pressed, reset the motor encoder
                 Climb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             }
+
 
             //PIDF Loop
             Climb_controller.setPID(Climb_p, Climb_i, Climb_d);
@@ -290,8 +307,9 @@ public class A_TeleOp extends LinearOpMode {
             double Climb_power = Climb_pid + Climb_ff;
             Climb.setPower(Climb_power);
 
+
             //Climb extend
-            if (gamepad1.dpad_left) {
+            if (gamepad1.dpad_left && gamepad1.right_bumper) {
                 //Open Servo
                 Hook.setPosition(HookSetPtOpen);
                 //Wait for servo to open
@@ -301,102 +319,129 @@ public class A_TeleOp extends LinearOpMode {
             }
 
             //Climb Retract
-            else if (gamepad1.dpad_down) {
+            else if (gamepad1.dpad_down && gamepad1.right_bumper) {
+                //Retract climb and servo
                 Climb_target = ClimbSetPtDown;
+                Hook.setPosition(HookSetPtClosed);
             }
             Climb.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 //---------------------------------------------------------------------------
 
-            //Drone Control
+            //Drone Deployment
 
-//            //If Drone is closed
-//            if (gamepad1.dpad_left && Drone.getPosition() < DroneSetPtOpen) {
-//                //Open Drone Servo
-//                Drone.setPosition(DroneSetPtOpen);
-//            }
-//            //If Drone is open
-//            else if (gamepad1.dpad_left && Drone.getPosition() > DroneSetPtClosed) {
-//                //Close Drone Servo
-//                Drone.setPosition(DroneSetPtClosed);
-//            }
+            //Deploy climb
+            if (gamepad1.dpad_right && Climb.getCurrentPosition() > -100 &&
+                    gamepad1.right_bumper) {
+                //Send climb up with hook still retracted
+                Climb_target = ClimbSetPtUp;
+            }
+
+            //Shoot Drone and retract
+            else if (gamepad1.dpad_right && Climb.getCurrentPosition() < -100 &&
+                    gamepad1.right_bumper) {
+                //Shoot drone
+                Drone.setPosition(DroneSetPtOpen);
+            }
 
 //---------------------------------------------------------------------------
 
-            //Wrist Toggle
-            //Check if the button is currently pressed and was not pressed in the previous iteration
-            if (currentRBumperButtonState && !previousRBumperButtonState) {
+            //2 Pixel Toggle
 
-                //If Lift in scoring, let go and retract wrist
-                if (Lift.getCurrentPosition() >= 100) {
-                    //retract wrist & Close Claw
-                    Claw.setPosition(ClawSetPtOpen);
-                    sleep(WristSleepBack);
-                    Wrist.setPosition(WristSetPtIn);
-                    ClawOpen = true;
-                    WristOut = false;
-                    //Lift to position
-                    Lift_target = LiftSetPtIntake;
+            //If Lift in scoring, let go and retract wrist
+            if (Lift.getCurrentPosition() >= 100 && gamepad1.right_trigger > 0.1) {
+                //retract wrist & Close Claw
+                Claw.setPosition(ClawSetPtOpen);
+                sleep(WristSleepBack);
+                Wrist.setPosition(WristSetPtIn);
+                ClawOpen = true;
+                WristOut = false;
+                //Lift to position
+                Lift_target = LiftSetPtIntake;
+            }
+
+            //If lift in intake, start intake sequence
+            else if (Lift.getCurrentPosition() < 100) {
+                //Check if button has been pressed
+                if (currentRTriggerState > 0 && previousRTriggerState <= 0) {
+                    if (!WristOut) {
+                        //Reach out and grab pixel
+                        //Claw open
+                        Claw.setPosition(ClawSetPtOpen);
+                        ClawOpen = true;
+                        //Wrist out
+                        Wrist.setPosition(WristSetPtOut);
+                        WristOut = true;
+                        //Wait
+                        sleep(WristSleepDown);
+                        //Grab Pixel
+                        Claw.setPosition(ClawSetPtClosed);
+                        ClawOpen = false;
+                        //Wait
+                        sleep(WristSleepUp);
+                    }
                 }
 
-                //If Lift at 0, reach out and grab a pixel
-                else if (Lift.getCurrentPosition() <100) {
-                    Claw.setPosition(ClawSetPtOpen);
-                    ClawOpen = true;
-                    Wrist.setPosition(WristSetPtOut);
-                    WristOut = true;
-                    //Wrist Out
-                    sleep(WristSleepDown);
-                    Claw.setPosition(ClawSetPtClosed);
-                    ClawOpen = false;
-                    //pick up pixel
-                    sleep(WristSleepUp);
-                    //wait for claw to close
+                else if (currentRTriggerState <= 0 && previousRTriggerState > 0) {
+                    //Pull pixel into robot
+                    //Wrist in
                     Wrist.setPosition(WristSetPtIn);
                     WristOut = false;
-                    //Wrist In
                 }
             }
 
 //---------------------------------------------------------------------------
 
-            //Auto Claw Toggle (single pixel)
-            if (gamepad1.right_trigger > 0.1) {
+            //1 Pixel Toggle
 
-                //If Lift in scoring, let go and retract wrist
-                if (Lift.getCurrentPosition() >= 100) {
-                    //retract wrist & Close Claw
-                    Claw.setPosition(ClawSetPtOpen);
-                    sleep(WristSleepBack);
-                    Wrist.setPosition(WristSetPtIn);
-                    ClawOpen = true;
-                    WristOut = false;
-                    //Lift to position
-                    Lift_target = LiftSetPtIntake;
+            //If Lift in scoring, let go and retract wrist
+            if (Lift.getCurrentPosition() >= 100 && gamepad1.left_trigger > 0.1) {
+                //retract wrist & Close Claw
+                Claw.setPosition(ClawSetPtOpen);
+                sleep(WristSleepBack);
+                Wrist.setPosition(WristSetPtIn);
+                ClawOpen = true;
+                WristOut = false;
+                //Lift to position
+                Lift_target = LiftSetPtIntake;
+            }
+
+            //If Lift in intake, enable intake sequence
+            else if (Lift.getCurrentPosition() < 100) {
+                //Check if the button has been pressed
+                if (currentLTriggerState > 0 && previousLTriggerState <= 0) {
+                    //Stop double deployment
+                    if (!WristOut) {
+                        //Reach out and grab pixel
+                        //Claw open
+                        Claw.setPosition(ClawSetPtOpen);
+                        ClawOpen = true;
+                        //Wrist out
+                        Wrist.setPosition(WristSetPtOut);
+                        WristOut = true;
+                        //Wait
+                        sleep(WristSleepDownSmall);
+                        //Grab Pixel
+                        Claw.setPosition(ClawSetPtSingleSmall);
+                        ClawOpen = false;
+                        //Wait
+                        sleep(WristSleepUpSmall);
+                    }
                 }
 
-                //If List at 0, reach out and grab a single pixel
-                else if (Lift.getCurrentPosition() <100) {
-                    Claw.setPosition(ClawSetPtOpen);
-                    ClawOpen = true;
-                    Wrist.setPosition(WristSetPtOut);
-                    WristOut = true;
-                    //Wrist Out
-                    sleep(WristSleepDownSmall);
-                    Claw.setPosition(ClawSetPtSingleSmall);
-                    ClawOpen = false;
-                    //pick up pixel
-                    sleep(WristSleepUpSmall);
-                    //wait for claw to close
+                //Check if the button has been released
+                else if (currentLTriggerState <= 0 && previousLTriggerState > 0) {
+                    //Pull pixel into robot
+                    //Wrist in
                     Wrist.setPosition(WristSetPtIn);
                     WristOut = false;
-                    //Wrist In
                 }
             }
 
 //---------------------------------------------------------------------------
 
             //Manual Claw Toggle
+
             //Check if the button is currently pressed and was not pressed in the previous iteration
             if (currentXButtonState && !previousXButtonState) {
                 if (ClawOpen) {
@@ -413,10 +458,13 @@ public class A_TeleOp extends LinearOpMode {
 //---------------------------------------------------------------------------
 
             //Update previous button states
-            //Claw Button State
-            previousRBumperButtonState = currentRBumperButtonState;
+
             //Wrist Button State
             previousXButtonState = currentXButtonState;
+            //2 Pixel Control
+            previousLTriggerState = currentLTriggerState;
+            //1 Pixel Control
+            previousRTriggerState = currentRTriggerState;
 
 //---------------------------------------------------------------------------
 
@@ -424,27 +472,23 @@ public class A_TeleOp extends LinearOpMode {
             //Drive Information
             telemetry.addData("Left Stick X", gamepad1.left_stick_x);
             telemetry.addData("Left Stick Y", gamepad1.left_stick_y);
-            telemetry.addData("Strafe Left", gamepad1.left_trigger);
-            telemetry.addData("Strafe Right", gamepad1.right_trigger);
+            telemetry.addData("Right Stick X", gamepad1.right_stick_x);
             //Lift Information
             telemetry.addData("1.Lift Position", Lift.getCurrentPosition());
             telemetry.addData("2.Lift Target", Lift_target);
             telemetry.addData("Lift Limit Switch", LiftLimitSwitch.getState());
             //Climb Information
-//            telemetry.addData("5.Climb State", gamepad1.dpad_up ? "Up" : "Down");
             telemetry.addData("3.Climb Position", Climb.getCurrentPosition());
             telemetry.addData("4.Climb Target", Climb_target);
             telemetry.addData("5.Climb Limit Switch", ClimbLimitSwitch.getState());
-            //Wrist Information
-            telemetry.addData("6.Wrist State", WristOut ? "Out" : "In");
-            telemetry.addData("wrist", Wrist.getPosition());
             //Claw Information
-            telemetry.addData("7.Claw State", ClawOpen ? "Open" : "Closed");
+            telemetry.addData("6.Claw State", ClawOpen ? "Open" : "Closed");
             telemetry.addData("claw", Claw.getPosition());
+            //Wrist Information
+            telemetry.addData("7.Wrist State", WristOut ? "Out" : "In");
+            telemetry.addData("wrist", Wrist.getPosition());
             //Update
             telemetry.update();
-
-
         }
     }
 }
