@@ -22,13 +22,14 @@ public class A_TeleOp_Syd extends LinearOpMode {
 //---------------------------------------------------------------------------
 
     //Motor Set Points
-    public static int LiftSetPtIntake = 30;
-    public static int LiftSetPtLvl1 = 600;
-    public static int LiftSetPtLvl2 = 1400;
-    public static int LiftSetPtLvl3 = 2200;
+    public static int LiftSetPtIntake = 20;
+    public static int LiftSetPtLvl1 = 400;
+    public static int LiftSetPtLvl2 = 1000;
+    public static int LiftSetPtLvl3 = 1600;
+    public static int LiftSetPtLvl4 = 2200;
 
     public static int ClimbSetPtUp = -2150;
-    public static int ClimbSetPtDown = -20;
+    public static int ClimbSetPtDown = -10;
 
 //---------------------------------------------------------------------------
 
@@ -41,8 +42,8 @@ public class A_TeleOp_Syd extends LinearOpMode {
     public static double ClawSetPtOpen = 0.8;
     public static double ClawSetPtSingleSmall = 0.94;
 
-    public static double DroneSetPtClosed = 1;
-    public static double DroneSetPtOpen = 0;
+    public static double DroneSetPtClosed = 0.5;
+    public static double DroneSetPtOpen = 0.59;
 
     public static double HookSetPtClosed = 0.5;
     public static double HookSetPtOpen = 0.35;
@@ -278,13 +279,19 @@ public class A_TeleOp_Syd extends LinearOpMode {
             //B Button Pressed
             else if (gamepad1.b) {
                 Wrist.setPosition(WristSetPtScore);
-                Lift_target =LiftSetPtLvl2;
+                Lift_target = LiftSetPtLvl2;
             }
 
             //Y Button Pressed
             else if (gamepad1.y) {
                 Wrist.setPosition(WristSetPtScore);
-                Lift_target =LiftSetPtLvl3;
+                Lift_target = LiftSetPtLvl3;
+            }
+
+            //X Button Pressed
+            else if (gamepad1.x) {
+                Wrist.setPosition(WristSetPtScore);
+                Lift_target = LiftSetPtLvl4;
             }
 
 //---------------------------------------------------------------------------
@@ -440,20 +447,20 @@ public class A_TeleOp_Syd extends LinearOpMode {
 
 //---------------------------------------------------------------------------
 
-            //Manual Claw Toggle
-
-            //Check if the button is currently pressed and was not pressed in the previous iteration
-            if (currentXButtonState && !previousXButtonState) {
-                if (ClawOpen) {
-                    Claw.setPosition(ClawSetPtClosed);
-                    ClawOpen = false;
-                    //Claw Closed
-                } else {
-                    Claw.setPosition(ClawSetPtOpen);
-                    ClawOpen = true;
-                    //Claw Open
-                }
-            }
+//            //Manual Claw Toggle
+//
+//            //Check if the button is currently pressed and was not pressed in the previous iteration
+//            if (currentXButtonState && !previousXButtonState) {
+//                if (ClawOpen) {
+//                    Claw.setPosition(ClawSetPtClosed);
+//                    ClawOpen = false;
+//                    //Claw Closed
+//                } else {
+//                    Claw.setPosition(ClawSetPtOpen);
+//                    ClawOpen = true;
+//                    //Claw Open
+//                }
+//            }
 
 //---------------------------------------------------------------------------
 

@@ -24,6 +24,7 @@ public class A_Blue_Backboard extends LinearOpMode{
     public static double WristSetPtScore = 0.44;
     public static double ClawSetPtSingleSmall = 1;
     public static double ClawSetPtOpen = 0.88;
+    public static double AutoClawSetPtOpen = 0.7;
 
     public void HardwareStart() {
         telemetry.addData("Object Creation", "Start");
@@ -175,7 +176,7 @@ public class A_Blue_Backboard extends LinearOpMode{
         sleep(500);
         Wrist.setPosition(WristSetPtScore);
         sleep(500);
-        Claw.setPosition(ClawSetPtOpen);
+        Claw.setPosition(AutoClawSetPtOpen);
 
         //Lift Down
         Lift.setTargetPosition(0);
