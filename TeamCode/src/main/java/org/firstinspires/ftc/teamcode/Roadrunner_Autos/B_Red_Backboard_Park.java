@@ -21,11 +21,11 @@ public class B_Red_Backboard_Park extends LinearOpMode{
     public int element_zone = 1;
     private TeamElementSubsystem teamElementDetection=null;
 
-    public static int AutoLiftSetPt = 300;
+    public static int AutoLiftSetPt = 100;
+    public static int LiftSetPtIntake = -5;
     public static double WristSetPtIn = 0.38;
     public static double WristSetPtScore = 0.44;
-    public static double ClawSetPtSingleSmall = 1;
-    public static double ClawSetPtOpen = 0.88;
+    public static double ClawSetPtSingleSmall = 0.94;
     public static double AutoClawSetPtOpen = 0.7;
 
 //---------------------------------------------------------------------------
@@ -201,10 +201,10 @@ public class B_Red_Backboard_Park extends LinearOpMode{
         Claw.setPosition(AutoClawSetPtOpen);
 
         //Lift Down
-        Lift.setTargetPosition(0);
+        Lift.setTargetPosition(LiftSetPtIntake);
         Lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Lift.setPower(1);
-        while (Lift.getCurrentPosition() != 0) {
+        while (Lift.getCurrentPosition() != LiftSetPtIntake) {
             telemetry.addLine("Running to zero");
             telemetry.addData("Currently at", Lift.getCurrentPosition());
             telemetry.update();

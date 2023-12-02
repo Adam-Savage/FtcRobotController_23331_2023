@@ -24,8 +24,8 @@ Wrist: Port 5
 Claw: Port 4
 
 Digital In
-LiftLimitSwitch: Port 0/1 - (1)
-ClimbLimitSwitch: Port 2/3 - (3)
+ClimbLimitSwitch: Port 0/1 - (1)
+LiftLimitSwitch: Port 2/3 - (3)
 
 
 Gamepad Controls List
