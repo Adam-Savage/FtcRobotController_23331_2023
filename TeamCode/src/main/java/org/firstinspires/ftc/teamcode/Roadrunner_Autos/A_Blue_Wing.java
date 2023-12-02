@@ -13,9 +13,13 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @Autonomous (preselectTeleOp = "A_TeleOp_Syd")
 public class A_Blue_Wing extends LinearOpMode{
-    public int element_zone = 1;
 
+//---------------------------------------------------------------------------
+
+    public int element_zone = 1;
     private TeamElementSubsystem teamElementDetection=null;
+
+//---------------------------------------------------------------------------
 
     public void HardwareStart() {
         telemetry.addData("Object Creation", "Start");
@@ -27,9 +31,13 @@ public class A_Blue_Wing extends LinearOpMode{
         telemetry.update();
     }
 
+//---------------------------------------------------------------------------
+
     public void runOpMode() {
 
         HardwareStart();
+
+//---------------------------------------------------------------------------
 
         String curAlliance = "blue";
 
@@ -47,15 +55,19 @@ public class A_Blue_Wing extends LinearOpMode{
         telemetry.addData("Object", "Passed waitForStart");
         telemetry.update();
 
+//---------------------------------------------------------------------------
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
+//---------------------------------------------------------------------------
 
         waitForStart();
 
         teamElementDetection.closePipeline();
 
         if (isStopRequested()) return;
+
+//---------------------------------------------------------------------------
 
         //Camera Detection and Purple Pixel
         if (element_zone == 1) {
@@ -99,7 +111,5 @@ public class A_Blue_Wing extends LinearOpMode{
                     .build();
             drive.followTrajectorySequence(trajectory);
         }
-
-        //End of Auto
     }
 }

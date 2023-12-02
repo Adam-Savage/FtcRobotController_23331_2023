@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @Autonomous (preselectTeleOp = "A_TeleOp_Syd")
-public class A_Red_Backboard extends LinearOpMode{
+public class B_Blue_Backboard_Park extends LinearOpMode{
 
 //---------------------------------------------------------------------------
 
@@ -56,7 +56,7 @@ public class A_Red_Backboard extends LinearOpMode{
 
 //---------------------------------------------------------------------------
 
-        String curAlliance = "red";
+        String curAlliance = "blue";
 
         while (!opModeIsActive() && !isStopRequested()){
             element_zone = teamElementDetection.elementDetection(telemetry);
@@ -101,19 +101,10 @@ public class A_Red_Backboard extends LinearOpMode{
             telemetry.update();
 
             TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
-                    .forward(14)
-
-                    .turn(Math.toRadians(15))
-                    .forward(5)
-                    .turn(Math.toRadians(15))
-                    .forward(10)
-
-                    .forward(-10)
-                    .turn(Math.toRadians(-30))
+                    .splineToConstantHeading(new Vector2d(22,11), Math.toRadians(-15))
                     .splineToConstantHeading(new Vector2d(0,0), Math.toRadians(0))
                     .build();
             drive.followTrajectorySequence(trajectory);
-
         }
 
         else if (element_zone == 2) {
@@ -129,11 +120,19 @@ public class A_Red_Backboard extends LinearOpMode{
         }
 
         else if (element_zone == 3) {
-            telemetry.addLine("Zone 3 Detected");
+            telemetry.addLine("Zone 3 selected");
             telemetry.update();
 
             TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
-                    .splineToConstantHeading(new Vector2d(22,-11), Math.toRadians(-15))
+                    .forward(14)
+
+                    .turn(Math.toRadians(-15))
+                    .forward(5)
+                    .turn(Math.toRadians(-15))
+                    .forward(10)
+
+                    .forward(-10)
+                    .turn(Math.toRadians(30))
                     .splineToConstantHeading(new Vector2d(0,0), Math.toRadians(0))
                     .build();
             drive.followTrajectorySequence(trajectory);
@@ -147,8 +146,8 @@ public class A_Red_Backboard extends LinearOpMode{
 
         if (element_zone == 1) {
             TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
-                    .splineTo(new Vector2d(18, -35), Math.toRadians(-90))
-                    .strafeLeft(20)
+                    .splineTo(new Vector2d(18, 35), Math.toRadians(90))
+                    .strafeRight(5)
                     .forward(6)
                     .build();
             drive.followTrajectorySequence(trajectory);
@@ -156,8 +155,8 @@ public class A_Red_Backboard extends LinearOpMode{
 
         else if (element_zone == 2) {
             TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
-                    .splineTo(new Vector2d(18, -35), Math.toRadians(-90))
-                    .strafeLeft(15)
+                    .splineTo(new Vector2d(18, 35), Math.toRadians(90))
+                    .strafeRight(15)
                     .forward(6)
                     .build();
             drive.followTrajectorySequence(trajectory);
@@ -165,8 +164,8 @@ public class A_Red_Backboard extends LinearOpMode{
 
         else if (element_zone == 3) {
             TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
-                    .splineTo(new Vector2d(18, -35), Math.toRadians(-90))
-                    .strafeLeft(5)
+                    .splineTo(new Vector2d(18, 35), Math.toRadians(90))
+                    .strafeRight(20)
                     .forward(6)
                     .build();
             drive.followTrajectorySequence(trajectory);
@@ -207,22 +206,22 @@ public class A_Red_Backboard extends LinearOpMode{
 
         //Move back from backboard
         if (element_zone == 1) {
-            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(38, -35, Math.toRadians(-90)))
-                    .lineToLinearHeading(new Pose2d(38, -33, Math.toRadians(-90)))
+            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(23, 35, Math.toRadians(90)))
+                    .lineToLinearHeading(new Pose2d(50, 33, Math.toRadians(90)))
                     .build();
             drive.followTrajectorySequence(trajectory);
         }
 
         else if (element_zone == 2) {
-            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(33, -35, Math.toRadians(-90)))
-                    .lineToLinearHeading(new Pose2d(33, -33, Math.toRadians(-90)))
+            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(33, 35, Math.toRadians(90)))
+                    .lineToLinearHeading(new Pose2d(50, 33, Math.toRadians(90)))
                     .build();
             drive.followTrajectorySequence(trajectory);
         }
 
         else if (element_zone == 3) {
-            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(23, -35, Math.toRadians(-90)))
-                    .lineToLinearHeading(new Pose2d(23, -33, Math.toRadians(-90)))
+            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(38, 35, Math.toRadians(90)))
+                    .lineToLinearHeading(new Pose2d(50, 33, Math.toRadians(90)))
                     .build();
             drive.followTrajectorySequence(trajectory);
         }

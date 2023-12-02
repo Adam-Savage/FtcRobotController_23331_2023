@@ -22,14 +22,14 @@ public class A_TeleOp_Syd extends LinearOpMode {
 //---------------------------------------------------------------------------
 
     //Motor Set Points
-    public static int LiftSetPtIntake = 20;
+    public static int LiftSetPtIntake = -5;
     public static int LiftSetPtLvl1 = 400;
     public static int LiftSetPtLvl2 = 1000;
     public static int LiftSetPtLvl3 = 1600;
     public static int LiftSetPtLvl4 = 2200;
 
     public static int ClimbSetPtUp = -2150;
-    public static int ClimbSetPtDown = -10;
+    public static int ClimbSetPtDown = 0;
 
 //---------------------------------------------------------------------------
 
@@ -104,6 +104,7 @@ public class A_TeleOp_Syd extends LinearOpMode {
 
         //IMU Declaration
         IMU imu = hardwareMap.get(IMU.class, "imu");
+
         //Parameters
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                 RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
@@ -155,6 +156,10 @@ public class A_TeleOp_Syd extends LinearOpMode {
         Wrist.setPosition(WristSetPtIn);
         Drone.setPosition(DroneSetPtClosed);
         Hook.setPosition(HookSetPtClosed);
+
+        //Initialise PIDF Loops
+        Climb_target = ClimbSetPtDown;
+        Lift_target = LiftSetPtIntake;
 
 //---------------------------------------------------------------------------
 
@@ -330,6 +335,8 @@ public class A_TeleOp_Syd extends LinearOpMode {
                 //Retract climb and servo
                 Climb_target = ClimbSetPtDown;
                 Hook.setPosition(HookSetPtClosed);
+                //Reset Drone Servo
+                Drone.setPosition(DroneSetPtClosed);
             }
             Climb.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
@@ -342,6 +349,7 @@ public class A_TeleOp_Syd extends LinearOpMode {
                     gamepad1.right_bumper) {
                 //Send climb up with hook still retracted
                 Climb_target = ClimbSetPtUp;
+                sleep(500);
             }
 
             //Shoot Drone and retract

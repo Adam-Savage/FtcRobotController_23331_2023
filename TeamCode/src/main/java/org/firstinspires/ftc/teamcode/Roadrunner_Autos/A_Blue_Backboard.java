@@ -15,16 +15,20 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @Autonomous (preselectTeleOp = "A_TeleOp_Syd")
 public class A_Blue_Backboard extends LinearOpMode{
-    public int element_zone = 1;
 
+//---------------------------------------------------------------------------
+
+    public int element_zone = 1;
     private TeamElementSubsystem teamElementDetection=null;
 
-    public static int LiftSetPtLvl1 = 300;
+    public static int AutoLiftSetPt = 300;
     public static double WristSetPtIn = 0.38;
     public static double WristSetPtScore = 0.44;
     public static double ClawSetPtSingleSmall = 1;
     public static double ClawSetPtOpen = 0.88;
     public static double AutoClawSetPtOpen = 0.7;
+
+//---------------------------------------------------------------------------
 
     public void HardwareStart() {
         telemetry.addData("Object Creation", "Start");
@@ -44,9 +48,13 @@ public class A_Blue_Backboard extends LinearOpMode{
         telemetry.update();
     }
 
+//---------------------------------------------------------------------------
+
     public void runOpMode() {
 
         HardwareStart();
+
+//---------------------------------------------------------------------------
 
         String curAlliance = "blue";
 
@@ -64,27 +72,28 @@ public class A_Blue_Backboard extends LinearOpMode{
         telemetry.addData("Object", "Passed waitForStart");
         telemetry.update();
 
+//---------------------------------------------------------------------------
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-
-//---------------------------------------------------------------------------
 
         //Servo Declaration
         Servo Wrist = hardwareMap.servo.get("Wrist");
         Servo Claw = hardwareMap.servo.get("Claw");
-
-//---------------------------------------------------------------------------
 
         //Lift Things
         DcMotor Lift = hardwareMap.dcMotor.get("Lift");
         Lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+//---------------------------------------------------------------------------
+
         waitForStart();
 
         teamElementDetection.closePipeline();
 
         if (isStopRequested()) return;
+
+//---------------------------------------------------------------------------
 
         //Camera Detection and Purple Pixel
         if (element_zone == 1) {
@@ -129,6 +138,8 @@ public class A_Blue_Backboard extends LinearOpMode{
             drive.followTrajectorySequence(trajectory);
         }
 
+//---------------------------------------------------------------------------
+
         //Drive to Backboard
         telemetry.addLine("To Backboard");
         telemetry.update();
@@ -160,12 +171,14 @@ public class A_Blue_Backboard extends LinearOpMode{
                 drive.followTrajectorySequence(trajectory);
         }
 
+//---------------------------------------------------------------------------
+
         //Score Yellow
         //Lift Up
-        Lift.setTargetPosition(LiftSetPtLvl1);
+        Lift.setTargetPosition(AutoLiftSetPt);
         Lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Lift.setPower(1);
-        while (Lift.getCurrentPosition() != LiftSetPtLvl1) {
+        while (Lift.getCurrentPosition() != AutoLiftSetPt) {
             telemetry.addLine("Running to Set pt");
             telemetry.addData("Currently at", Lift.getCurrentPosition());
             telemetry.update();
@@ -188,6 +201,8 @@ public class A_Blue_Backboard extends LinearOpMode{
             telemetry.update();
         }
         Lift.setPower(0);
+
+//---------------------------------------------------------------------------
 
         //Move back from backboard
         if (element_zone == 1) {

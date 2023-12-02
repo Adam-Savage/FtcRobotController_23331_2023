@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @Autonomous (preselectTeleOp = "A_TeleOp_Syd")
-public class A_Red_Backboard extends LinearOpMode{
+public class B_Red_Backboard_Park extends LinearOpMode{
 
 //---------------------------------------------------------------------------
 
@@ -174,6 +174,14 @@ public class A_Red_Backboard extends LinearOpMode{
 
 //---------------------------------------------------------------------------
 
+        //Telemetry Position
+        Pose2d currentPose = drive.getPoseEstimate();
+        telemetry.addData("X Position", currentPose.getX());
+        telemetry.addData("Y Position", currentPose.getY());
+        telemetry.update();
+
+//---------------------------------------------------------------------------
+
         //Score Yellow
         //Lift Up
         Lift.setTargetPosition(AutoLiftSetPt);
@@ -205,24 +213,27 @@ public class A_Red_Backboard extends LinearOpMode{
 
 //---------------------------------------------------------------------------
 
-        //Move back from backboard
+        //Move back from backboard to Center-field
         if (element_zone == 1) {
             TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(38, -35, Math.toRadians(-90)))
-                    .lineToLinearHeading(new Pose2d(38, -33, Math.toRadians(-90)))
+                    .lineToLinearHeading(new Pose2d(50, -33, Math.toRadians(-90)))
+                    .forward(5)
                     .build();
             drive.followTrajectorySequence(trajectory);
         }
 
         else if (element_zone == 2) {
             TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(33, -35, Math.toRadians(-90)))
-                    .lineToLinearHeading(new Pose2d(33, -33, Math.toRadians(-90)))
+                    .lineToLinearHeading(new Pose2d(50, -33, Math.toRadians(-90)))
+                    .forward(5)
                     .build();
             drive.followTrajectorySequence(trajectory);
         }
 
         else if (element_zone == 3) {
             TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(23, -35, Math.toRadians(-90)))
-                    .lineToLinearHeading(new Pose2d(23, -33, Math.toRadians(-90)))
+                    .lineToLinearHeading(new Pose2d(50, -33, Math.toRadians(-90)))
+                    .forward(5)
                     .build();
             drive.followTrajectorySequence(trajectory);
         }
