@@ -52,8 +52,8 @@ public class A_TeleOp_Syd extends LinearOpMode {
 
     //Lift PIDF Variables
     public PIDController Lift_controller;
-    public static double Lift_p = 0.004, Lift_i = 0.001, Lift_d = 0.0001;
-    public static double Lift_f = 0.0001;
+    public static double Lift_p = 0.002, Lift_i = 0.00, Lift_d = 0.0001;
+    public static double Lift_f = 0.000;
     public static int Lift_target = 0;
 
     //Climb PIDF Variables

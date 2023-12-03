@@ -18,7 +18,7 @@ public class Z_Global_Variables {
 //---------------------------------------------------------------------------
 
     //Motor Set Points
-    public static int LiftSetPtIntake = -5;
+//    public static int LiftSetPtIntake = -5;
     public static int LiftSetPtLvl1 = 400;
     public static int LiftSetPtLvl2 = 1000;
     public static int LiftSetPtLvl3 = 1600;
@@ -30,13 +30,13 @@ public class Z_Global_Variables {
 //---------------------------------------------------------------------------
 
     //Servo Set Points
-    public static double WristSetPtIn = 0.38;
+//    public static double WristSetPtIn = 0.38;
     public static double WristSetPtOut = 0.64;
-    public static double WristSetPtScore = 0.44;
+//    public static double WristSetPtScore = 0.44;
 
     public static double ClawSetPtClosed = 0.88;
     public static double ClawSetPtOpen = 0.8;
-    public static double ClawSetPtSingleSmall = 0.94;
+//    public static double ClawSetPtSingleSmall = 0.94;
 
     public static double DroneSetPtClosed = 0.5;
     public static double DroneSetPtOpen = 0.59;

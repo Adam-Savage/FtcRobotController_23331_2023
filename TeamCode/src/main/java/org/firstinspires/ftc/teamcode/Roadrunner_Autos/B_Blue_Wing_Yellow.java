@@ -148,9 +148,9 @@ public class B_Blue_Wing_Yellow extends LinearOpMode{
             TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
                     .forward(5)
                     .turn(Math.toRadians(90))
-                    .forward(82.5)
+                    .forward(72.5)
                     .strafeRight(19)
-                    .forward(6)
+                    .forward(16)
                     .build();
             drive.followTrajectorySequence(trajectory);
         }
@@ -159,9 +159,9 @@ public class B_Blue_Wing_Yellow extends LinearOpMode{
             TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
                     .forward(5)
                     .turn(Math.toRadians(90))
-                    .forward(82.5)
-                    .strafeRight(29)
-                    .forward(6)
+                    .forward(72.5)
+                    .strafeRight(27)
+                    .forward(16)
                     .build();
             drive.followTrajectorySequence(trajectory);
         }
@@ -170,9 +170,9 @@ public class B_Blue_Wing_Yellow extends LinearOpMode{
             TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
                     .forward(5)
                     .turn(Math.toRadians(90))
-                    .forward(82.5)
+                    .forward(72.5)
                     .strafeRight(34)
-                    .forward(6)
+                    .forward(16)
                     .build();
             drive.followTrajectorySequence(trajectory);
         }
@@ -218,21 +218,21 @@ public class B_Blue_Wing_Yellow extends LinearOpMode{
 
         //Move back from backboard
         if (element_zone == 1) {
-            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(24, -88.5, Math.toRadians(90)))
+            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(24, 88.5, Math.toRadians(90)))
                     .lineToLinearHeading(new Pose2d(24, -86, Math.toRadians(90)))
                     .build();
             drive.followTrajectorySequence(trajectory);
         }
 
         else if (element_zone == 2) {
-            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(35, -88.5, Math.toRadians(90)))
+            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(35, 88.5, Math.toRadians(90)))
                     .lineToLinearHeading(new Pose2d(35, -86, Math.toRadians(90)))
                     .build();
             drive.followTrajectorySequence(trajectory);
         }
 
         else if (element_zone == 3) {
-            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(40, -88.5, Math.toRadians(90)))
+            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(40, 88.5, Math.toRadians(90)))
                     .lineToLinearHeading(new Pose2d(40, -86, Math.toRadians(90)))
                     .build();
             drive.followTrajectorySequence(trajectory);

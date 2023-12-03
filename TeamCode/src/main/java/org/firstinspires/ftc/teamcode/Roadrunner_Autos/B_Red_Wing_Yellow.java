@@ -149,9 +149,9 @@ public class B_Red_Wing_Yellow extends LinearOpMode{
             TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
                     .forward(5)
                     .turn(Math.toRadians(-90))
-                    .forward(82.5)
+                    .forward(72.5)
                     .strafeLeft(34)
-                    .forward(6)
+                    .forward(16)
                     .build();
             drive.followTrajectorySequence(trajectory);
         }
@@ -160,9 +160,9 @@ public class B_Red_Wing_Yellow extends LinearOpMode{
             TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
                     .forward(5)
                     .turn(Math.toRadians(-90))
-                    .forward(82.5)
-                    .strafeLeft(29)
-                    .forward(6)
+                    .forward(72.5)
+                    .strafeLeft(27)
+                    .forward(16)
                     .build();
             drive.followTrajectorySequence(trajectory);
         }
@@ -171,9 +171,9 @@ public class B_Red_Wing_Yellow extends LinearOpMode{
             TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
                     .forward(5)
                     .turn(Math.toRadians(-90))
-                    .forward(82.5)
+                    .forward(72.5)
                     .strafeLeft(19)
-                    .forward(6)
+                    .forward(16)
                     .build();
             drive.followTrajectorySequence(trajectory);
         }
