@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Season.Subsystems.TeamElementDetection.TeamElementSubsystem;
+import org.firstinspires.ftc.teamcode.Season.Z_Global_Variables;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
@@ -21,12 +22,15 @@ public class B_Blue_Backboard_Park extends LinearOpMode{
     public int element_zone = 1;
     private TeamElementSubsystem teamElementDetection=null;
 
-    public static int AutoLiftSetPt = 100;
-    public static int LiftSetPtIntake = -5;
-    public static double WristSetPtIn = 0.38;
-    public static double WristSetPtScore = 0.44;
-    public static double ClawSetPtSingleSmall = 0.94;
-    public static double AutoClawSetPtOpen = 0.7;
+    int AutoLiftSetPt = Z_Global_Variables.AutoLiftSetPt;
+    int LiftSetPtIntake = Z_Global_Variables.LiftSetPtIntake;
+    double WristSetPtIn = Z_Global_Variables.WristSetPtIn;
+    double WristSetPtScore = Z_Global_Variables.WristSetPtScore;
+    double ClawSetPtSingleSmall = Z_Global_Variables.ClawSetPtSingleSmall;
+    double AutoClawSetPtOpen = Z_Global_Variables.AutoClawSetPtOpen;
+
+
+
 
 //---------------------------------------------------------------------------
 
