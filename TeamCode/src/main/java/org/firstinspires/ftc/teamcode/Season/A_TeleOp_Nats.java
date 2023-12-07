@@ -82,6 +82,9 @@ public class A_TeleOp_Nats extends OpMode {
     public double previousRTriggerState = 0;
     public double previousLTriggerState = 0;
 
+    //Lift Reset timer initialization
+    public long lastResetTime = 0;
+
 //---------------------------------------------------------------------------
 
     public DcMotor frontLeftMotor;
@@ -224,8 +227,8 @@ public class A_TeleOp_Nats extends OpMode {
 
         //Slow Driving
         if (gamepad1.left_bumper) {
-            LeftStickY = -gamepad1.left_stick_y * 0.2;
-            LeftStickX = gamepad1.left_stick_x * 0.2;
+            LeftStickY = -gamepad1.left_stick_y * 0.25;
+            LeftStickX = gamepad1.left_stick_x * 0.25;
             RX = gamepad1.right_stick_x * 0.3;
         }
 
@@ -255,7 +258,7 @@ public class A_TeleOp_Nats extends OpMode {
         double rotY = LeftStickX * Math.sin(-botHeading) + LeftStickY * Math.cos(-botHeading);
 
         //Strafing Correction
-        rotX = rotX * 1;
+        rotX = rotX * 1.2;
 
         //Maths for individual motor control
         double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(RX), 1);
@@ -274,10 +277,14 @@ public class A_TeleOp_Nats extends OpMode {
 
         //Lift Control
 
+        long currentTime = System.currentTimeMillis();
         //Limit Switch Encoder Reset
-        if ((!LiftLimitSwitch.getState()) && (Lift.getCurrentPosition() != 0)) {
+        if ((!LiftLimitSwitch.getState()) && (Lift.getCurrentPosition() != 0
+                && currentTime - lastResetTime >= 1000)) {
             // Limit switch is pressed, reset the motor encoder
             Lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            Lift_target = 0;
+            lastResetTime = currentTime;
         }
 
 
@@ -374,6 +381,18 @@ public class A_TeleOp_Nats extends OpMode {
                 gamepad1.right_bumper) {
             //Shoot drone
             Drone.setPosition(DroneSetPtOpen);
+        }
+
+        //Toggle Drone for Testing
+        if (gamepad1.dpad_up && gamepad1.right_bumper) {
+            if (Drone.getPosition() < 0.51) {
+                Drone.setPosition(DroneSetPtOpen);
+                sleep(500);
+            }
+            if (Drone.getPosition() > 0.58) {
+                Drone.setPosition(DroneSetPtClosed);
+                sleep(500);
+            }
         }
 
 //---------------------------------------------------------------------------
@@ -525,6 +544,9 @@ public class A_TeleOp_Nats extends OpMode {
         //Wrist Information
         telemetry.addData("7.Wrist State", Intaking? "Out" : "In");
         telemetry.addData("wrist", Wrist.getPosition());
+        //Drone Information
+        telemetry.addData("8. Back Button", gamepad1.back);
+        telemetry.addData("9. Drone", Drone.getPosition());
         //Update
         telemetry.update();
     }

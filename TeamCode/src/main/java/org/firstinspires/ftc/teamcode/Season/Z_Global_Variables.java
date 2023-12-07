@@ -1,8 +1,10 @@
 package org.firstinspires.ftc.teamcode.Season;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 @Disabled
+@Config
 public class Z_Global_Variables {
 
 //---------------------------------------------------------------------------
@@ -18,12 +20,12 @@ public class Z_Global_Variables {
 //---------------------------------------------------------------------------
 
     //Motor Set Points
-//    public static int LiftSetPtIntake = -5;
-    public static int LiftSetPtIntake = 0;
-    public static int LiftSetPtLvl1 = 400;
-    public static int LiftSetPtLvl2 = 1000;
-    public static int LiftSetPtLvl3 = 1600;
-    public static int LiftSetPtLvl4 = 2200;
+    public static int LiftSetPtIntake = -10;
+    public static int LiftSetPtLvl1 = 350;
+    public static int LiftSetPtLvl2 = 700;
+    public static int LiftSetPtLvl3 = 1050;
+    public static int LiftSetPtLvl4 = 1400;
+//    public static int LiftSetPtLvl4 = 2200;
 
     public static int ClimbSetPtUp = -2150;
     public static int ClimbSetPtDown = 0;
@@ -36,7 +38,7 @@ public class Z_Global_Variables {
     public static double WristSetPtScore = 0.44;
 
     public static double ClawSetPtClosed = 0.88;
-    public static double ClawSetPtOpen = 0.8;
+    public static double ClawSetPtOpen = 0.75;
     public static double ClawSetPtSingleSmall = 0.94;
 
     public static double DroneSetPtClosed = 0.5;
@@ -54,6 +56,4 @@ public class Z_Global_Variables {
     public static int WristSleepDownSmall = 400;
     public static int WristSleepUpSmall = 200;
     public static int WristSleepBack = 100;
-    public double previousRTriggerState = 0;
-    public double previousLTriggerState = 0;
 }
