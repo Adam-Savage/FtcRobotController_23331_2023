@@ -198,7 +198,8 @@ public class A_TeleOp_Nats extends OpMode {
     public void start() {
         //Code to run ONCE when the driver hits PLAY
 
-        //Send elevator up and down to reset the end pt
+//        //Send elevator down to reset the end pt
+//        Lift_target = -10;
     }
 
 //---------------------------------------------------------------------------
@@ -278,7 +279,7 @@ public class A_TeleOp_Nats extends OpMode {
         //Lift Control
 
         long currentTime = System.currentTimeMillis();
-        //Limit Switch Encoder Reset
+        //Limit Switch Encoder Reset IF TIME HAS PASSED
         if ((!LiftLimitSwitch.getState()) && (Lift.getCurrentPosition() != 0
                 && currentTime - lastResetTime >= 1000)) {
             // Limit switch is pressed, reset the motor encoder
@@ -373,22 +374,25 @@ public class A_TeleOp_Nats extends OpMode {
                 gamepad1.right_bumper) {
             //Send climb up with hook still retracted
             Climb_target = ClimbSetPtUp;
+            //Reduce double clicks
             sleep(500);
         }
 
-        //Shoot Drone and retract
+        //Shoot Drone
         else if (gamepad1.dpad_right && Climb.getCurrentPosition() < -100 &&
                 gamepad1.right_bumper) {
             //Shoot drone
             Drone.setPosition(DroneSetPtOpen);
         }
 
-        //Toggle Drone for Testing
+        //Shoot drone and reset
         if (gamepad1.dpad_up && gamepad1.right_bumper) {
+            //Drone is shut, Open Drone
             if (Drone.getPosition() < 0.51) {
                 Drone.setPosition(DroneSetPtOpen);
                 sleep(500);
             }
+            //Drone is open, Shut Drone
             if (Drone.getPosition() > 0.58) {
                 Drone.setPosition(DroneSetPtClosed);
                 sleep(500);
@@ -405,8 +409,6 @@ public class A_TeleOp_Nats extends OpMode {
             Claw.setPosition(ClawSetPtOpen);
             sleep(WristSleepBack);
             Wrist.setPosition(WristSetPtIn);
-//            ClawOpen = true;
-//            WristOut = false;
             //Lift to position
             Lift_target = LiftSetPtIntake;
         }
@@ -419,15 +421,12 @@ public class A_TeleOp_Nats extends OpMode {
                 //Reach out and grab pixel
                 //Claw open
                 Claw.setPosition(ClawSetPtOpen);
-//                    ClawOpen = true;
                 //Wrist out
                 Wrist.setPosition(WristSetPtOut);
-//                    WristOut = true;
                 //Wait
                 sleep(WristSleepDown);
                 //Grab Pixel
                 Claw.setPosition(ClawSetPtClosed);
-//                    ClawOpen = false;
                 //Wait
                 sleep(WristSleepUp);
             }
@@ -436,7 +435,6 @@ public class A_TeleOp_Nats extends OpMode {
                 //Pull pixel into robot
                 //Wrist in
                 Wrist.setPosition(WristSetPtIn);
-//                WristOut = false;
                 Intaking = false;
             }
         }
@@ -451,8 +449,6 @@ public class A_TeleOp_Nats extends OpMode {
             Claw.setPosition(ClawSetPtOpen);
             sleep(WristSleepBack);
             Wrist.setPosition(WristSetPtIn);
-//            ClawOpen = true;
-//            WristOut = false;
             //Lift to position
             Lift_target = LiftSetPtIntake;
         }
@@ -467,21 +463,14 @@ public class A_TeleOp_Nats extends OpMode {
                     //Reach out and grab pixel
                     //Claw open
                     Claw.setPosition(ClawSetPtOpen);
-//                    ClawOpen = true;
                     //Wrist out
                     Wrist.setPosition(WristSetPtOut);
-//                    WristOut = true;
                     //Wait
                     sleep(WristSleepDownSmall);
                     //Grab Pixel
                     Claw.setPosition(ClawSetPtSingleSmall);
-//                    ClawOpen = false;
                     //Wait
-                    try {
-                        Thread.sleep(WristSleepUpSmall);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
+                    sleep(WristSleepUpSmall);
                 }
             }
 
@@ -490,34 +479,14 @@ public class A_TeleOp_Nats extends OpMode {
                 //Pull pixel into robot
                 //Wrist in
                 Wrist.setPosition(WristSetPtIn);
-//                WristOut = false;
                 Intaking = false;
             }
         }
 
 //---------------------------------------------------------------------------
 
-//            //Manual Claw Toggle
-//
-//            //Check if the button is currently pressed and was not pressed in the previous iteration
-//            if (currentXButtonState && !previousXButtonState) {
-//                if (ClawOpen) {
-//                    Claw.setPosition(ClawSetPtClosed);
-//                    ClawOpen = false;
-//                    //Claw Closed
-//                } else {
-//                    Claw.setPosition(ClawSetPtOpen);
-//                    ClawOpen = true;
-//                    //Claw Open
-//                }
-//            }
-
-//---------------------------------------------------------------------------
-
         //Update previous button states
 
-//        //Wrist Button State
-//        previousXButtonState = currentXButtonState;
         //2 Pixel Control
         previousLTriggerState = currentLTriggerState;
         //1 Pixel Control
@@ -539,14 +508,13 @@ public class A_TeleOp_Nats extends OpMode {
         telemetry.addData("4.Climb Target", Climb_target);
         telemetry.addData("5.Climb Limit Switch", ClimbLimitSwitch.getState());
         //Claw Information
-//        telemetry.addData("6.Claw State", ClawOpen ? "Open" : "Closed");
-        telemetry.addData("claw", Claw.getPosition());
+        telemetry.addData("8. claw", Claw.getPosition());
         //Wrist Information
         telemetry.addData("7.Wrist State", Intaking? "Out" : "In");
-        telemetry.addData("wrist", Wrist.getPosition());
+        telemetry.addData("9. wrist", Wrist.getPosition());
         //Drone Information
-        telemetry.addData("8. Back Button", gamepad1.back);
-        telemetry.addData("9. Drone", Drone.getPosition());
+        telemetry.addData("10. Back Button", gamepad1.back);
+        telemetry.addData("11. Drone", Drone.getPosition());
         //Update
         telemetry.update();
     }

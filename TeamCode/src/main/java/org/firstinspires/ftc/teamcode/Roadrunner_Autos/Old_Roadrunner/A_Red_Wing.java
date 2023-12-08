@@ -1,6 +1,7 @@
-package org.firstinspires.ftc.teamcode.Roadrunner_Autos;
+package org.firstinspires.ftc.teamcode.Roadrunner_Autos.Old_Roadrunner;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Season.Subsystems.TeamElementDetection.TeamElementSubsystem;
@@ -11,8 +12,9 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
+@Disabled
 @Autonomous (preselectTeleOp = "A_TeleOp_Syd")
-public class A_Blue_Wing extends LinearOpMode{
+public class A_Red_Wing extends LinearOpMode{
 
 //---------------------------------------------------------------------------
 
@@ -29,6 +31,7 @@ public class A_Blue_Wing extends LinearOpMode{
 
         telemetry.addData("Object Creation", "Done");
         telemetry.update();
+
     }
 
 //---------------------------------------------------------------------------
@@ -39,7 +42,7 @@ public class A_Blue_Wing extends LinearOpMode{
 
 //---------------------------------------------------------------------------
 
-        String curAlliance = "blue";
+        String curAlliance = "red";
 
         while (!opModeIsActive() && !isStopRequested()){
             element_zone = teamElementDetection.elementDetection(telemetry);
@@ -75,15 +78,7 @@ public class A_Blue_Wing extends LinearOpMode{
             telemetry.update();
 
             TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
-                    .forward(14)
-
-                    .turn(Math.toRadians(15))
-                    .forward(5)
-                    .turn(Math.toRadians(15))
-                    .forward(10)
-
-                    .forward(-10)
-                    .turn(Math.toRadians(-30))
+                    .splineToConstantHeading(new Vector2d(22,11), Math.toRadians(-15))
                     .splineToConstantHeading(new Vector2d(0,0), Math.toRadians(0))
                     .build();
             drive.followTrajectorySequence(trajectory);
@@ -106,7 +101,15 @@ public class A_Blue_Wing extends LinearOpMode{
             telemetry.update();
 
             TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
-                    .splineToConstantHeading(new Vector2d(22,-11), Math.toRadians(-15))
+                    .forward(14)
+
+                    .turn(Math.toRadians(-15))
+                    .forward(5)
+                    .turn(Math.toRadians(-15))
+                    .forward(10)
+
+                    .forward(-10)
+                    .turn(Math.toRadians(30))
                     .splineToConstantHeading(new Vector2d(0,0), Math.toRadians(0))
                     .build();
             drive.followTrajectorySequence(trajectory);

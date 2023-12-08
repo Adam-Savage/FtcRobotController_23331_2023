@@ -14,7 +14,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
-@Autonomous (preselectTeleOp = "A_TeleOp_Syd")
+@Autonomous (preselectTeleOp = "A_TeleOp_Nats")
 public class B_Blue_Backboard_Park extends LinearOpMode{
 
 //---------------------------------------------------------------------------
@@ -26,6 +26,7 @@ public class B_Blue_Backboard_Park extends LinearOpMode{
     int LiftSetPtIntake = Z_Global_Variables.LiftSetPtIntake;
     double WristSetPtIn = Z_Global_Variables.WristSetPtIn;
     double WristSetPtScore = Z_Global_Variables.WristSetPtScore;
+    double WristHoldPixel = Z_Global_Variables.WristHoldPixel;
     double ClawSetPtSingleSmall = Z_Global_Variables.ClawSetPtSingleSmall;
     double AutoClawSetPtOpen = Z_Global_Variables.AutoClawSetPtOpen;
 
@@ -124,20 +125,9 @@ public class B_Blue_Backboard_Park extends LinearOpMode{
             telemetry.addLine("Zone 3 selected");
             telemetry.update();
 
-            Wrist.setPosition(0.62);
+            Wrist.setPosition(WristHoldPixel);
 
             TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
-//                    .forward(14)
-//
-//                    .turn(Math.toRadians(-15))
-//                    .forward(5)
-//                    .turn(Math.toRadians(-15))
-//                    .forward(10)
-
-//                    .forward(-10)
-//                    .turn(Math.toRadians(30))
-//                    .splineToConstantHeading(new Vector2d(18,0), Math.toRadians(0))
-
                     .forward(30)
                     .turn(Math.toRadians(-90))
                     .forward(2)
@@ -146,7 +136,8 @@ public class B_Blue_Backboard_Park extends LinearOpMode{
 
             Wrist.setPosition(WristSetPtIn);
 
-            TrajectorySequence back = drive.trajectorySequenceBuilder(new Pose2d(30,2,Math.toRadians(90)))
+            TrajectorySequence back = drive.trajectorySequenceBuilder(new Pose2d(30,2,
+                            Math.toRadians(-90)))
                     .forward(-2)
                     .turn(Math.toRadians(90))
                     .forward(-12)
@@ -222,7 +213,8 @@ public class B_Blue_Backboard_Park extends LinearOpMode{
 
         //Move back from backboard and park
         if (element_zone == 1) {
-            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(23, 35, Math.toRadians(90)))
+            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(23, 35,
+                            Math.toRadians(90)))
                     .lineToLinearHeading(new Pose2d(23, 33, Math.toRadians(90)))
                     .lineToLinearHeading(new Pose2d(57, 33, Math.toRadians(90)))
                     .lineToLinearHeading(new Pose2d(57, 40, Math.toRadians(90)))
@@ -231,7 +223,8 @@ public class B_Blue_Backboard_Park extends LinearOpMode{
         }
 
         else if (element_zone == 2) {
-            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(33, 35, Math.toRadians(90)))
+            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(33, 35,
+                            Math.toRadians(90)))
                     .lineToLinearHeading(new Pose2d(33, 33, Math.toRadians(90)))
                     .lineToLinearHeading(new Pose2d(57, 33, Math.toRadians(90)))
                     .lineToLinearHeading(new Pose2d(57, 40, Math.toRadians(90)))
@@ -240,7 +233,8 @@ public class B_Blue_Backboard_Park extends LinearOpMode{
         }
 
         else if (element_zone == 3) {
-            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(38, 35, Math.toRadians(90)))
+            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(38, 35,
+                            Math.toRadians(90)))
                     .lineToLinearHeading(new Pose2d(38, 33, Math.toRadians(90)))
                     .lineToLinearHeading(new Pose2d(57, 33, Math.toRadians(90)))
                     .lineToLinearHeading(new Pose2d(57, 40, Math.toRadians(90)))

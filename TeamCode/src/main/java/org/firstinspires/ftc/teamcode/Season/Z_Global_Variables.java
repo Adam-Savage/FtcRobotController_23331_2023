@@ -12,8 +12,11 @@ public class Z_Global_Variables {
     //Auto Variables
     public static int AutoLiftSetPt = 100;
 //    public static int LiftSetPtIntake = -5;
+
 //    public static double WristSetPtIn = 0.38;
 //    public static double WristSetPtScore = 0.44;
+    public static double WristHoldPixel = 0.62;
+
 //    public static double ClawSetPtSingleSmall = 0.94;
     public static double AutoClawSetPtOpen = 0.7;
 

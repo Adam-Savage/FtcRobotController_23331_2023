@@ -1,10 +1,10 @@
-package org.firstinspires.ftc.teamcode.Roadrunner_Autos;
+package org.firstinspires.ftc.teamcode.Roadrunner_Autos.Old_Roadrunner;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Season.Subsystems.TeamElementDetection.TeamElementSubsystem;
-import org.firstinspires.ftc.teamcode.Season.Z_Global_Variables;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
@@ -14,21 +14,21 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
-@Autonomous (preselectTeleOp = "A_TeleOp_Nats")
-public class B_Red_Backboard_Park extends LinearOpMode{
+@Disabled
+@Autonomous (preselectTeleOp = "A_TeleOp_Syd")
+public class A_Blue_Backboard extends LinearOpMode{
 
 //---------------------------------------------------------------------------
 
     public int element_zone = 1;
     private TeamElementSubsystem teamElementDetection=null;
 
-    int AutoLiftSetPt = Z_Global_Variables.AutoLiftSetPt;
-    int LiftSetPtIntake = Z_Global_Variables.LiftSetPtIntake;
-    double WristSetPtIn = Z_Global_Variables.WristSetPtIn;
-    double WristSetPtScore = Z_Global_Variables.WristSetPtScore;
-    double WristHoldPixel = Z_Global_Variables.WristHoldPixel;
-    double ClawSetPtSingleSmall = Z_Global_Variables.ClawSetPtSingleSmall;
-    double AutoClawSetPtOpen = Z_Global_Variables.AutoClawSetPtOpen;
+    public static int AutoLiftSetPt = 300;
+    public static double WristSetPtIn = 0.38;
+    public static double WristSetPtScore = 0.44;
+    public static double ClawSetPtSingleSmall = 1;
+    public static double ClawSetPtOpen = 0.88;
+    public static double AutoClawSetPtOpen = 0.7;
 
 //---------------------------------------------------------------------------
 
@@ -58,7 +58,7 @@ public class B_Red_Backboard_Park extends LinearOpMode{
 
 //---------------------------------------------------------------------------
 
-        String curAlliance = "red";
+        String curAlliance = "blue";
 
         while (!opModeIsActive() && !isStopRequested()){
             element_zone = teamElementDetection.elementDetection(telemetry);
@@ -102,24 +102,11 @@ public class B_Red_Backboard_Park extends LinearOpMode{
             telemetry.addLine("Zone 1 Detected");
             telemetry.update();
 
-            Wrist.setPosition(WristHoldPixel);
-
             TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
-                    .forward(30)
-                    .turn(Math.toRadians(90))
-                    .forward(2)
+                    .splineToConstantHeading(new Vector2d(22,11), Math.toRadians(-15))
+                    .splineToConstantHeading(new Vector2d(0,0), Math.toRadians(0))
                     .build();
             drive.followTrajectorySequence(trajectory);
-
-            Wrist.setPosition(WristSetPtIn);
-
-            TrajectorySequence back = drive.trajectorySequenceBuilder(new Pose2d(30,-2,
-                            Math.toRadians(90)))
-                    .forward(-2)
-                    .turn(Math.toRadians(-90))
-                    .forward(-12)
-                    .build();
-            drive.followTrajectorySequence(back);
         }
 
         else if (element_zone == 2) {
@@ -129,18 +116,26 @@ public class B_Red_Backboard_Park extends LinearOpMode{
             TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
                     .forward(30.5)
                     .waitSeconds(0.5)
-                    .forward(-12.5)
+                    .forward(-30.5)
                     .build();
             drive.followTrajectorySequence(trajectory);
         }
 
         else if (element_zone == 3) {
-            telemetry.addLine("Zone 3 Detected");
+            telemetry.addLine("Zone 3 selected");
             telemetry.update();
 
             TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
-                    .splineToConstantHeading(new Vector2d(22,-11), Math.toRadians(-15))
-                    .splineToConstantHeading(new Vector2d(10,0), Math.toRadians(0))
+                    .forward(14)
+
+                    .turn(Math.toRadians(-15))
+                    .forward(5)
+                    .turn(Math.toRadians(-15))
+                    .forward(10)
+
+                    .forward(-10)
+                    .turn(Math.toRadians(30))
+                    .splineToConstantHeading(new Vector2d(0,0), Math.toRadians(0))
                     .build();
             drive.followTrajectorySequence(trajectory);
         }
@@ -152,30 +147,30 @@ public class B_Red_Backboard_Park extends LinearOpMode{
         telemetry.update();
 
         if (element_zone == 1) {
-            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(18,0))
-                    .splineTo(new Vector2d(18, -35), Math.toRadians(-90))
-                    .strafeLeft(20)
+            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
+                    .splineTo(new Vector2d(18, 35), Math.toRadians(90))
+                    .strafeRight(5)
                     .forward(6)
                     .build();
             drive.followTrajectorySequence(trajectory);
         }
 
         else if (element_zone == 2) {
-            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(18,0))
-                    .splineTo(new Vector2d(18, -35), Math.toRadians(-90))
-                    .strafeLeft(15)
+            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
+                    .splineTo(new Vector2d(18, 35), Math.toRadians(90))
+                    .strafeRight(15)
                     .forward(6)
                     .build();
             drive.followTrajectorySequence(trajectory);
         }
 
         else if (element_zone == 3) {
-            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(10,0))
-                    .splineTo(new Vector2d(18, -35), Math.toRadians(-90))
-                    .strafeLeft(5)
-                    .forward(6)
-                    .build();
-            drive.followTrajectorySequence(trajectory);
+                TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
+                        .splineTo(new Vector2d(18, 35), Math.toRadians(90))
+                        .strafeRight(20)
+                        .forward(6)
+                        .build();
+                drive.followTrajectorySequence(trajectory);
         }
 
 //---------------------------------------------------------------------------
@@ -199,10 +194,10 @@ public class B_Red_Backboard_Park extends LinearOpMode{
         Claw.setPosition(AutoClawSetPtOpen);
 
         //Lift Down
-        Lift.setTargetPosition(LiftSetPtIntake);
+        Lift.setTargetPosition(0);
         Lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Lift.setPower(1);
-        while (Lift.getCurrentPosition() != LiftSetPtIntake) {
+        while (Lift.getCurrentPosition() != 0) {
             telemetry.addLine("Running to zero");
             telemetry.addData("Currently at", Lift.getCurrentPosition());
             telemetry.update();
@@ -211,34 +206,24 @@ public class B_Red_Backboard_Park extends LinearOpMode{
 
 //---------------------------------------------------------------------------
 
-        //Move back from backboard and park
+        //Move back from backboard
         if (element_zone == 1) {
-            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(38, -35,
-                            Math.toRadians(-90)))
-                    .lineToLinearHeading(new Pose2d(38, -33, Math.toRadians(-90)))
-                    .lineToLinearHeading(new Pose2d(57, -33, Math.toRadians(-90)))
-                    .lineToLinearHeading(new Pose2d(57, -40, Math.toRadians(-90)))
+            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(23, 35, Math.toRadians(90)))
+                    .lineToLinearHeading(new Pose2d(23, 33, Math.toRadians(90)))
                     .build();
             drive.followTrajectorySequence(trajectory);
         }
 
         else if (element_zone == 2) {
-            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(33, -35,
-                            Math.toRadians(-90)))
-                    .lineToLinearHeading(new Pose2d(33, -33, Math.toRadians(-90)))
-                    .lineToLinearHeading(new Pose2d(57, -33, Math.toRadians(-90)))
-                    .lineToLinearHeading(new Pose2d(57, -40, Math.toRadians(-90)))                    .forward(5)
+            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(33, 35, Math.toRadians(90)))
+                    .lineToLinearHeading(new Pose2d(33, 33, Math.toRadians(90)))
                     .build();
             drive.followTrajectorySequence(trajectory);
         }
 
         else if (element_zone == 3) {
-            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(23, -35,
-                            Math.toRadians(-90)))
-                    .lineToLinearHeading(new Pose2d(23, -33, Math.toRadians(-90)))
-                    .lineToLinearHeading(new Pose2d(57, -33, Math.toRadians(-90)))
-                    .lineToLinearHeading(new Pose2d(57, -40, Math.toRadians(-90)))
-                    .forward(5)
+            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(38, 35, Math.toRadians(90)))
+                    .lineToLinearHeading(new Pose2d(38, 33, Math.toRadians(90)))
                     .build();
             drive.followTrajectorySequence(trajectory);
         }

@@ -1,30 +1,25 @@
-package org.firstinspires.ftc.teamcode.Roadrunner_Autos;
+package org.firstinspires.ftc.teamcode.Roadrunner_Autos.Old_Roadrunner;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Season.Subsystems.TeamElementDetection.TeamElementSubsystem;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
+@Disabled
 @Autonomous (preselectTeleOp = "A_TeleOp_Syd")
-public class A_Blue_Wing_Park extends LinearOpMode{
+public class A_Blue_Wing extends LinearOpMode{
 
 //---------------------------------------------------------------------------
 
     public int element_zone = 1;
     private TeamElementSubsystem teamElementDetection=null;
-
-    public static double WristSetPtIn = 0.38;
-    public static double WristSetPtScore = 0.44;
-    public static double ClawSetPtSingleSmall = 1;
-    public static double ClawSetPtOpen = 0.88;
-    public static double AutoClawSetPtOpen = 0.7;
 
 //---------------------------------------------------------------------------
 
@@ -33,14 +28,6 @@ public class A_Blue_Wing_Park extends LinearOpMode{
         telemetry.update();
 
         teamElementDetection = new TeamElementSubsystem(hardwareMap);
-
-        //Servo Declaration
-        Servo Wrist = hardwareMap.servo.get("Wrist");
-        Servo Claw = hardwareMap.servo.get("Claw");
-
-        //Initialise Servos
-        Claw.setPosition(ClawSetPtSingleSmall);
-        Wrist.setPosition(WristSetPtIn);
 
         telemetry.addData("Object Creation", "Done");
         telemetry.update();
@@ -73,10 +60,6 @@ public class A_Blue_Wing_Park extends LinearOpMode{
 //---------------------------------------------------------------------------
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-
-        //Servo Declaration
-        Servo Wrist = hardwareMap.servo.get("Wrist");
-        Servo Claw = hardwareMap.servo.get("Claw");
 
 //---------------------------------------------------------------------------
 
@@ -130,31 +113,5 @@ public class A_Blue_Wing_Park extends LinearOpMode{
                     .build();
             drive.followTrajectorySequence(trajectory);
         }
-
-//---------------------------------------------------------------------------
-
-        //Wait to drive along wall
-        sleep(100);
-
-//---------------------------------------------------------------------------
-
-        //Drive along Wall to Park
-        telemetry.addLine("To Park");
-        telemetry.update();
-
-        TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
-                .forward(5)
-                .turn(Math.toRadians(90))
-                .forward(90)
-                .build();
-        drive.followTrajectorySequence(trajectory);
-
-//---------------------------------------------------------------------------
-
-        //Put down Yellow
-        Wrist.setPosition(WristSetPtScore);
-        sleep(500);
-        Claw.setPosition(AutoClawSetPtOpen);
-        sleep(500);
     }
 }

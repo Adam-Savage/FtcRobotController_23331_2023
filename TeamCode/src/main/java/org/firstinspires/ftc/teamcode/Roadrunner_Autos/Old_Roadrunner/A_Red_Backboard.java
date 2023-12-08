@@ -1,6 +1,7 @@
-package org.firstinspires.ftc.teamcode.Roadrunner_Autos;
+package org.firstinspires.ftc.teamcode.Roadrunner_Autos.Old_Roadrunner;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Season.Subsystems.TeamElementDetection.TeamElementSubsystem;
@@ -13,6 +14,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
+@Disabled
 @Autonomous (preselectTeleOp = "A_TeleOp_Syd")
 public class A_Red_Backboard extends LinearOpMode{
 

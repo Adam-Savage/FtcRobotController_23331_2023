@@ -1,27 +1,27 @@
-package org.firstinspires.ftc.teamcode.Roadrunner_Autos;
+package org.firstinspires.ftc.teamcode.Roadrunner_Autos.Old_Roadrunner;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Season.Subsystems.TeamElementDetection.TeamElementSubsystem;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
+@Disabled
 @Autonomous (preselectTeleOp = "A_TeleOp_Syd")
-public class A_Blue_Backboard extends LinearOpMode{
+public class A_Red_Wing_Park extends LinearOpMode{
 
 //---------------------------------------------------------------------------
 
     public int element_zone = 1;
     private TeamElementSubsystem teamElementDetection=null;
 
-    public static int AutoLiftSetPt = 300;
     public static double WristSetPtIn = 0.38;
     public static double WristSetPtScore = 0.44;
     public static double ClawSetPtSingleSmall = 1;
@@ -56,7 +56,7 @@ public class A_Blue_Backboard extends LinearOpMode{
 
 //---------------------------------------------------------------------------
 
-        String curAlliance = "blue";
+        String curAlliance = "red";
 
         while (!opModeIsActive() && !isStopRequested()){
             element_zone = teamElementDetection.elementDetection(telemetry);
@@ -79,11 +79,6 @@ public class A_Blue_Backboard extends LinearOpMode{
         //Servo Declaration
         Servo Wrist = hardwareMap.servo.get("Wrist");
         Servo Claw = hardwareMap.servo.get("Claw");
-
-        //Lift Things
-        DcMotor Lift = hardwareMap.dcMotor.get("Lift");
-        Lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        Lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 //---------------------------------------------------------------------------
 
@@ -120,7 +115,7 @@ public class A_Blue_Backboard extends LinearOpMode{
         }
 
         else if (element_zone == 3) {
-            telemetry.addLine("Zone 3 selected");
+            telemetry.addLine("Zone 3 Detected");
             telemetry.update();
 
             TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
@@ -140,90 +135,28 @@ public class A_Blue_Backboard extends LinearOpMode{
 
 //---------------------------------------------------------------------------
 
-        //Drive to Backboard
-        telemetry.addLine("To Backboard");
-        telemetry.update();
-
-        if (element_zone == 1) {
-            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
-                    .splineTo(new Vector2d(18, 35), Math.toRadians(90))
-                    .strafeRight(5)
-                    .forward(6)
-                    .build();
-            drive.followTrajectorySequence(trajectory);
-        }
-
-        else if (element_zone == 2) {
-            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
-                    .splineTo(new Vector2d(18, 35), Math.toRadians(90))
-                    .strafeRight(15)
-                    .forward(6)
-                    .build();
-            drive.followTrajectorySequence(trajectory);
-        }
-
-        else if (element_zone == 3) {
-                TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
-                        .splineTo(new Vector2d(18, 35), Math.toRadians(90))
-                        .strafeRight(20)
-                        .forward(6)
-                        .build();
-                drive.followTrajectorySequence(trajectory);
-        }
+        //Wait to drive along wall
+        sleep(100);
 
 //---------------------------------------------------------------------------
 
-        //Score Yellow
-        //Lift Up
-        Lift.setTargetPosition(AutoLiftSetPt);
-        Lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Lift.setPower(1);
-        while (Lift.getCurrentPosition() != AutoLiftSetPt) {
-            telemetry.addLine("Running to Set pt");
-            telemetry.addData("Currently at", Lift.getCurrentPosition());
-            telemetry.update();
-        }
-        Lift.setPower(0);
+        //Drive along Wall to Park
+        telemetry.addLine("To Park");
+        telemetry.update();
 
-        //Claw Things
-        sleep(500);
+        TrajectorySequence trajectory1 = drive.trajectorySequenceBuilder(new Pose2d())
+                .forward(5)
+                .turn(Math.toRadians(-90))
+                .forward(90)
+                .build();
+        drive.followTrajectorySequence(trajectory1);
+
+//---------------------------------------------------------------------------
+
+        //Put down Yellow
         Wrist.setPosition(WristSetPtScore);
         sleep(500);
         Claw.setPosition(AutoClawSetPtOpen);
-
-        //Lift Down
-        Lift.setTargetPosition(0);
-        Lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Lift.setPower(1);
-        while (Lift.getCurrentPosition() != 0) {
-            telemetry.addLine("Running to zero");
-            telemetry.addData("Currently at", Lift.getCurrentPosition());
-            telemetry.update();
-        }
-        Lift.setPower(0);
-
-//---------------------------------------------------------------------------
-
-        //Move back from backboard
-        if (element_zone == 1) {
-            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(23, 35, Math.toRadians(90)))
-                    .lineToLinearHeading(new Pose2d(23, 33, Math.toRadians(90)))
-                    .build();
-            drive.followTrajectorySequence(trajectory);
-        }
-
-        else if (element_zone == 2) {
-            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(33, 35, Math.toRadians(90)))
-                    .lineToLinearHeading(new Pose2d(33, 33, Math.toRadians(90)))
-                    .build();
-            drive.followTrajectorySequence(trajectory);
-        }
-
-        else if (element_zone == 3) {
-            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(38, 35, Math.toRadians(90)))
-                    .lineToLinearHeading(new Pose2d(38, 33, Math.toRadians(90)))
-                    .build();
-            drive.followTrajectorySequence(trajectory);
-        }
+        sleep(500);
     }
 }
