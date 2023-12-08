@@ -199,7 +199,7 @@ public class A_TeleOp_Nats extends OpMode {
         //Code to run ONCE when the driver hits PLAY
 
 //        //Send elevator down to reset the end pt
-//        Lift_target = -10;
+//        Lift_target = -10
     }
 
 //---------------------------------------------------------------------------
