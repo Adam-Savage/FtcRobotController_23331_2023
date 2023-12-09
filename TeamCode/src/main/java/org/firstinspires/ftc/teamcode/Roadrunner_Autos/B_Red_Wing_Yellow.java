@@ -140,7 +140,7 @@ public class B_Red_Wing_Yellow extends LinearOpMode{
             TrajectorySequence back = drive.trajectorySequenceBuilder(new Pose2d(30,2,
                             Math.toRadians(-90)))
                     .forward(-2)
-                    .strafeRight(25)
+                    .strafeRight(27)
                     .build();
             drive.followTrajectorySequence(back);
         }
@@ -155,8 +155,8 @@ public class B_Red_Wing_Yellow extends LinearOpMode{
             TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(5,0))
                     .turn(Math.toRadians(-90))
                     .forward(72.5)
-                    .strafeLeft(34)
-                    .forward(16)
+                    .strafeLeft(32)
+                    .forward(18)
                     .build();
             drive.followTrajectorySequence(trajectory);
         }
@@ -165,18 +165,18 @@ public class B_Red_Wing_Yellow extends LinearOpMode{
             TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(5,0))
                     .turn(Math.toRadians(-90))
                     .forward(72.5)
-                    .strafeLeft(27)
-                    .forward(16)
+                    .strafeLeft(30)
+                    .forward(18)
                     .build();
             drive.followTrajectorySequence(trajectory);
         }
 
         else if (element_zone == 3) {
-            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(5,4,
+            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(3,4,
                             Math.toRadians(-90)))
                     .forward(74.5)
-                    .strafeLeft(19)
-                    .forward(16)
+                    .strafeLeft(21)
+                    .forward(18)
                     .build();
             drive.followTrajectorySequence(trajectory);
         }
@@ -210,11 +210,14 @@ public class B_Red_Wing_Yellow extends LinearOpMode{
         }
         Lift.setPower(0);
 
+        //Retract wrist
+        Wrist.setPosition(WristSetPtIn);
+
 //---------------------------------------------------------------------------
 
         //Move back from backboard
         if (element_zone == 1) {
-            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(40, -88.5,
+            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(40, -90.5,
                             Math.toRadians(-90)))
                     .lineToLinearHeading(new Pose2d(40, -86, Math.toRadians(-90)))
                     .build();
@@ -222,15 +225,15 @@ public class B_Red_Wing_Yellow extends LinearOpMode{
         }
 
         else if (element_zone == 2) {
-            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(32, -88.5,
+            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(35, -90.5,
                             Math.toRadians(-90)))
-                    .lineToLinearHeading(new Pose2d(32, -86, Math.toRadians(-90)))
+                    .lineToLinearHeading(new Pose2d(35, -86, Math.toRadians(-90)))
                     .build();
             drive.followTrajectorySequence(trajectory);
         }
 
         else if (element_zone == 3) {
-            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(24, -88.5,
+            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(24, -90.5,
                             Math.toRadians(-90)))
                     .lineToLinearHeading(new Pose2d(24, -86, Math.toRadians(-90)))
                     .build();

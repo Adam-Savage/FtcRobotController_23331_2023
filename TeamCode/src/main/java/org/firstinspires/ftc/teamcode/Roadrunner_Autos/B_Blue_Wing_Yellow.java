@@ -210,6 +210,9 @@ public class B_Blue_Wing_Yellow extends LinearOpMode{
         }
         Lift.setPower(0);
 
+        //Retract wrist
+        Wrist.setPosition(WristSetPtIn);
+
 //---------------------------------------------------------------------------
 
         //Move back from backboard

@@ -154,7 +154,7 @@ public class B_Red_Backboard_Park extends LinearOpMode{
         if (element_zone == 1) {
             TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(18,0))
                     .splineTo(new Vector2d(18, -35), Math.toRadians(-90))
-                    .strafeLeft(20)
+                    .strafeLeft(22)
                     .forward(6)
                     .build();
             drive.followTrajectorySequence(trajectory);
@@ -209,15 +209,18 @@ public class B_Red_Backboard_Park extends LinearOpMode{
         }
         Lift.setPower(0);
 
+        //Retract wrist
+        Wrist.setPosition(WristSetPtIn);
+
 //---------------------------------------------------------------------------
 
         //Move back from backboard and park
         if (element_zone == 1) {
-            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(38, -35,
+            TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(40, -35,
                             Math.toRadians(-90)))
-                    .lineToLinearHeading(new Pose2d(38, -33, Math.toRadians(-90)))
+                    .lineToLinearHeading(new Pose2d(40, -33, Math.toRadians(-90)))
                     .lineToLinearHeading(new Pose2d(57, -33, Math.toRadians(-90)))
-                    .lineToLinearHeading(new Pose2d(57, -40, Math.toRadians(-90)))
+                    .lineToLinearHeading(new Pose2d(57, -38, Math.toRadians(-90)))
                     .build();
             drive.followTrajectorySequence(trajectory);
         }
@@ -227,7 +230,7 @@ public class B_Red_Backboard_Park extends LinearOpMode{
                             Math.toRadians(-90)))
                     .lineToLinearHeading(new Pose2d(33, -33, Math.toRadians(-90)))
                     .lineToLinearHeading(new Pose2d(57, -33, Math.toRadians(-90)))
-                    .lineToLinearHeading(new Pose2d(57, -40, Math.toRadians(-90)))                    .forward(5)
+                    .lineToLinearHeading(new Pose2d(57, -38, Math.toRadians(-90)))                    .forward(5)
                     .build();
             drive.followTrajectorySequence(trajectory);
         }
@@ -237,7 +240,7 @@ public class B_Red_Backboard_Park extends LinearOpMode{
                             Math.toRadians(-90)))
                     .lineToLinearHeading(new Pose2d(23, -33, Math.toRadians(-90)))
                     .lineToLinearHeading(new Pose2d(57, -33, Math.toRadians(-90)))
-                    .lineToLinearHeading(new Pose2d(57, -40, Math.toRadians(-90)))
+                    .lineToLinearHeading(new Pose2d(57, -38, Math.toRadians(-90)))
                     .forward(5)
                     .build();
             drive.followTrajectorySequence(trajectory);
