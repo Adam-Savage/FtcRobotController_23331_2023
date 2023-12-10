@@ -1,21 +1,19 @@
 package org.firstinspires.ftc.teamcode.Roadrunner_Autos;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
-import org.firstinspires.ftc.teamcode.Season.Subsystems.TeamElementDetection.TeamElementSubsystem;
-import org.firstinspires.ftc.teamcode.Season.Z_Global_Variables;
-
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.Season.Subsystems.TeamElementDetection.TeamElementSubsystem;
+import org.firstinspires.ftc.teamcode.Season.Z_Global_Variables;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @Autonomous (preselectTeleOp = "A_TeleOp_Nats")
-public class B_Blue_Wing_Yellow extends LinearOpMode{
+public class A_Greybacks_Blue_Wing_Yellow extends LinearOpMode{
 
 //---------------------------------------------------------------------------
 
@@ -153,10 +151,10 @@ public class B_Blue_Wing_Yellow extends LinearOpMode{
         if (element_zone == 1) {
             TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(5,4,
                             Math.toRadians(90)))
-                    .turn(Math.toRadians(90))
-                    .forward(72.5)
+//                    .turn(Math.toRadians(90))
+                    .forward(66.5)
                     .strafeRight(19)
-                    .forward(16)
+                    .forward(22)
                     .build();
             drive.followTrajectorySequence(trajectory);
         }
@@ -164,9 +162,9 @@ public class B_Blue_Wing_Yellow extends LinearOpMode{
         else if (element_zone == 2) {
             TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(5,0))
                     .turn(Math.toRadians(90))
-                    .forward(72.5)
+                    .forward(66.5)
                     .strafeRight(27)
-                    .forward(16)
+                    .forward(22)
                     .build();
             drive.followTrajectorySequence(trajectory);
         }
@@ -174,9 +172,9 @@ public class B_Blue_Wing_Yellow extends LinearOpMode{
         else if (element_zone == 3) {
             TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d(5,0))
                     .turn(Math.toRadians(90))
-                    .forward(72.5)
+                    .forward(66.5)
                     .strafeRight(34)
-                    .forward(16)
+                    .forward(22)
                     .build();
             drive.followTrajectorySequence(trajectory);
         }
@@ -199,9 +197,6 @@ public class B_Blue_Wing_Yellow extends LinearOpMode{
         Wrist.setPosition(WristSetPtScore);
         Claw.setPosition(AutoClawSetPtOpen);
 
-        //Retract wrist
-        Wrist.setPosition(WristSetPtIn);
-
         //Lift Down
         Lift.setTargetPosition(LiftSetPtIntake);
         Lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -212,6 +207,9 @@ public class B_Blue_Wing_Yellow extends LinearOpMode{
             telemetry.update();
         }
         Lift.setPower(0);
+
+        //Retract wrist
+        Wrist.setPosition(WristSetPtIn);
 
 //---------------------------------------------------------------------------
 
