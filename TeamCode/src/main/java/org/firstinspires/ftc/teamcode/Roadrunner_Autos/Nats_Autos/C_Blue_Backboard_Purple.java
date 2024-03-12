@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Roadrunner_Autos;
+package org.firstinspires.ftc.teamcode.Roadrunner_Autos.Nats_Autos;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @Autonomous (preselectTeleOp = "A_TeleOp_Nats")
-public class C_Blue_Wing_Purple extends LinearOpMode{
+public class C_Blue_Backboard_Purple extends LinearOpMode{
 
 //---------------------------------------------------------------------------
 
@@ -43,6 +43,7 @@ public class C_Blue_Wing_Purple extends LinearOpMode{
 
         telemetry.addData("Object Creation", "Done");
         telemetry.update();
+
     }
 
 //---------------------------------------------------------------------------
@@ -89,15 +90,7 @@ public class C_Blue_Wing_Purple extends LinearOpMode{
             telemetry.update();
 
             TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
-                    .forward(14)
-
-                    .turn(Math.toRadians(15))
-                    .forward(5)
-                    .turn(Math.toRadians(15))
-                    .forward(10)
-
-                    .forward(-10)
-                    .turn(Math.toRadians(-30))
+                    .splineToConstantHeading(new Vector2d(22,11), Math.toRadians(-15))
                     .splineToConstantHeading(new Vector2d(0,0), Math.toRadians(0))
                     .build();
             drive.followTrajectorySequence(trajectory);
@@ -120,7 +113,15 @@ public class C_Blue_Wing_Purple extends LinearOpMode{
             telemetry.update();
 
             TrajectorySequence trajectory = drive.trajectorySequenceBuilder(new Pose2d())
-                    .splineToConstantHeading(new Vector2d(22,-11), Math.toRadians(-15))
+                    .forward(14)
+
+                    .turn(Math.toRadians(-15))
+                    .forward(5)
+                    .turn(Math.toRadians(-15))
+                    .forward(10)
+
+                    .forward(-10)
+                    .turn(Math.toRadians(30))
                     .splineToConstantHeading(new Vector2d(0,0), Math.toRadians(0))
                     .build();
             drive.followTrajectorySequence(trajectory);

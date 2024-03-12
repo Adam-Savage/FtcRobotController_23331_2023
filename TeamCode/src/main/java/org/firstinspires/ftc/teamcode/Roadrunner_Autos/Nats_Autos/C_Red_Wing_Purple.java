@@ -1,6 +1,7 @@
-package org.firstinspires.ftc.teamcode.Roadrunner_Autos;
+package org.firstinspires.ftc.teamcode.Roadrunner_Autos.Nats_Autos;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Season.Subsystems.TeamElementDetection.TeamElementSubsystem;
@@ -14,8 +15,9 @@ import org.firstinspires.ftc.teamcode.Season.Z_Global_Variables;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
+@Disabled
 @Autonomous (preselectTeleOp = "A_TeleOp_Nats")
-public class C_Blue_Backboard_Purple extends LinearOpMode{
+public class C_Red_Wing_Purple extends LinearOpMode{
 
 //---------------------------------------------------------------------------
 
@@ -54,7 +56,7 @@ public class C_Blue_Backboard_Purple extends LinearOpMode{
 
 //---------------------------------------------------------------------------
 
-        String curAlliance = "blue";
+        String curAlliance = "red";
 
         while (!opModeIsActive() && !isStopRequested()){
             element_zone = teamElementDetection.elementDetection(telemetry);
