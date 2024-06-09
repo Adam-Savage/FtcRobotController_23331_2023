@@ -28,44 +28,60 @@ public class A_TeleOp_APOC extends OpMode {
     //Motor Set Points
 
     //Servo Set Points
+    double leftArmStowed = 0.1;
+    double leftArmPickUp = 0;
+    double leftArmScore = 0.6;
+    double rightArmStowed = 1 - leftArmStowed;
+    double rightArmPickUp = 1 - leftArmPickUp;
+    double rightArmScore = 1 - leftArmScore;
+
+    int wristStowed = 0;
+    int wristScore = 0;
+
+    int spinClawStowed = 0;
+    int spinClawLeftScore = 0;
+    int spinClawRightScore = 0;
+
+    int clawOpen = 0;
+    int clawClosed = 0;
+    int clawClosed1Pixel = 0;
+
+    double intakeStowed = 0;
+    double intakePickUp = 0.4;
+    int intakePickUpStack = 0;
+
+
 
     //Autonomous Function Sleeps
 
 //---------------------------------------------------------------------------
 
     //Elevator PIDF Variables
-    public PIDFController Elevator_controller;
-    public static double E_p = 0, E_i = 0, E_d = 0;
-    public static double E_f = 0;
-    public static int Elevator_target = 0;
-
-    //Intake PIDF Variables
-    public PIDFController Intake_controller;
-    public static double I_p = 0, I_i = 0, I_d = 0;
-    public static double I_f = 0;
-    public static int Intake_target = 0;
+//    public PIDFController elevatorController;
+//    public static double eP = 0, eI = 0, eD = 0;
+//    public static double eF = 0;
+//    public static int elevatorTarget = 0;
 
     //Climb PIDF Variables
-    public PIDFController Climb_controller;
-    public static double C_p = 0, C_i = 0, C_d = 0;
-    public static double C_f = 0;
-    public static int Climb_target = 0;
+//    public PIDFController climbController;
+//    public static double cP = 0, cI = 0, cD = 0;
+//    public static double cF = 0;
+//    public static int climbTarget = 0;
 
     //Wrist PIDF Variables
-    public PIDFController Wrist_controller;
-    public static double W_p = 0, W_i = 0, W_d = 0;
-    public static double W_f = 0;
-    public static int Wrist_target = 0;
+//    public PIDFController wristController;
+//    public static double wP = 0, wI = 0, wD = 0;
+//    public static double wF = 0;
+//    public static int wristTarget = 0;
 
 //---------------------------------------------------------------------------
 
     //Limit Switch Definition
-    DigitalChannel ElevatorLimit;
-    DigitalChannel IntakeLimit;
-    DigitalChannel ClimbHookLeft;
-    DigitalChannel ClimbHookRight;
-    DigitalChannel IntakePixel1;
-    DigitalChannel IntakePixel2;
+//    DigitalChannel elevatorLimit;
+//    DigitalChannel innerPixel;
+//    DigitalChannel outerPixel;
+//    DigitalChannel climbHookLeft;
+//    DigitalChannel climbHookRight;
 
 //---------------------------------------------------------------------------
 
@@ -84,21 +100,23 @@ public class A_TeleOp_APOC extends OpMode {
     public DcMotor backRightMotor;
 
 
-    public DcMotor Elevator;
-    public DcMotor leftClimb;
-    public DcMotor rightClimb;
+    public DcMotor elevator;
+    public DcMotor elevatorBack;
+//    public DcMotor leftClimb;
+//    public DcMotor rightClimb;
+    public DcMotor intake;
 
 
-    public Servo Wrist;
-    public Servo openClaw;
-    public Servo spinClaw;
-    public Servo deployDrone;
-    public Servo launchDrone;
-    public Servo spinIntake;
+    public Servo leftArm;
+    public Servo rightArm;
+//    public Servo wrist;
+//    public Servo spinClaw;
+//    public Servo openClaw;
     public Servo extendIntake;
-    public Servo lockHandoff;
-    public Servo leftClimbQuick;
-    public Servo rightClimbQuick;
+//    public Servo deployDrone;
+//    public Servo launchDrone;
+//    public Servo leftClimbQuick;
+//    public Servo rightClimbQuick;
 
 
 //---------------------------------------------------------------------------
@@ -110,15 +128,13 @@ public class A_TeleOp_APOC extends OpMode {
 //---------------------------------------------------------------------------
 
         //Motor Declaration
-        frontLeftMotor = hardwareMap.get(DcMotor.class, "Leftfront");
-        backLeftMotor = hardwareMap.get(DcMotor.class, "Leftback");
-        frontRightMotor = hardwareMap.get(DcMotor.class, "Rightfront");
-        backRightMotor = hardwareMap.get(DcMotor.class, "Rightback");
+        frontLeftMotor = hardwareMap.get(DcMotor.class, "frontLeftMotor");
+        backLeftMotor = hardwareMap.get(DcMotor.class, "backLeftMotor");
+        frontRightMotor = hardwareMap.get(DcMotor.class, "frontRightMotor");
+        backRightMotor = hardwareMap.get(DcMotor.class, "backRightMotor");
 
         //Motor Reverse
-        frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        backLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
 //---------------------------------------------------------------------------
@@ -129,74 +145,79 @@ public class A_TeleOp_APOC extends OpMode {
         //Parameters
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                 RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
-                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD));
+                RevHubOrientationOnRobot.UsbFacingDirection.UP));
         imu.initialize(parameters);
 
 //---------------------------------------------------------------------------
 
         //Motor Declaration
-        Elevator = hardwareMap.get(DcMotor.class, "Elevator");
-        leftClimb = hardwareMap.get(DcMotor.class, "leftClimb");
-        rightClimb = hardwareMap.get(DcMotor.class, "rightClimb");
+        elevator = hardwareMap.get(DcMotor.class, "elevator");
+        elevatorBack = hardwareMap.get(DcMotor.class, "elevatorBack");
+//        leftClimb = hardwareMap.get(DcMotor.class, "leftClimb");
+//        rightClimb = hardwareMap.get(DcMotor.class, "rightClimb");
+        intake = hardwareMap.get(DcMotor.class, "intake");
 
         //Encoder Mode
-        Elevator.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftClimb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightClimb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        elevator.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        elevatorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        leftClimb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        rightClimb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        intake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         //Enable Break
-        Elevator.setZeroPowerBehavior(ZeroPowerBehavior.BRAKE);
-        leftClimb.setZeroPowerBehavior(ZeroPowerBehavior.BRAKE);
-        rightClimb.setZeroPowerBehavior(ZeroPowerBehavior.BRAKE);
+        elevator.setZeroPowerBehavior(ZeroPowerBehavior.BRAKE);
+        elevatorBack.setZeroPowerBehavior(ZeroPowerBehavior.BRAKE);
+//        leftClimb.setZeroPowerBehavior(ZeroPowerBehavior.BRAKE);
+//        rightClimb.setZeroPowerBehavior(ZeroPowerBehavior.BRAKE);
+        intake.setZeroPowerBehavior(ZeroPowerBehavior.BRAKE);
 
+        //Reverse
+        elevatorBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
 //---------------------------------------------------------------------------
 
         //PIDF Setup
-        Elevator_controller = new PIDFController(E_p, E_i, E_d, E_f);
-        Intake_controller = new PIDFController(I_p, I_i, I_d, I_f);
-        Climb_controller = new PIDFController(C_p, C_i, C_d, C_f);
-        Wrist_controller = new PIDFController(W_p, W_i, W_d, W_f);
+//        elevatorController = new PIDFController(eP, eI, eD, eF);
+//        climbController = new PIDFController(cP, cI, cD, cF);
+//        wristController = new PIDFController(wP, wI, wD, wF);
 
         //Servo Setup
-        Wrist = hardwareMap.get(Servo.class, "Wrist");
-        openClaw = hardwareMap.get(Servo.class, "openClaw");
-        spinClaw = hardwareMap.get(Servo.class, "spinClaw");
-        deployDrone = hardwareMap.get(Servo.class, "deployDrone");
-        launchDrone = hardwareMap.get(Servo.class, "launchDrone");
-        spinIntake = hardwareMap.get(Servo.class, "spinIntake");
+        leftArm = hardwareMap.get(Servo.class, "leftArm");
+        rightArm = hardwareMap.get(Servo.class, "rightArm");
+//        wrist = hardwareMap.get(Servo.class, "wrist");
+//        spinClaw = hardwareMap.get(Servo.class, "spinClaw");
+//        openClaw = hardwareMap.get(Servo.class, "openClaw");
         extendIntake = hardwareMap.get(Servo.class, "extendIntake");
-        lockHandoff = hardwareMap.get(Servo.class, "lockHandoff");
-        leftClimbQuick = hardwareMap.get(Servo.class, "leftClimbQuick");
-        rightClimbQuick = hardwareMap.get(Servo.class, "rightClimbQuick");
+//        deployDrone = hardwareMap.get(Servo.class, "deployDrone");
+//        launchDrone = hardwareMap.get(Servo.class, "launchDrone");
+//        leftClimbQuick = hardwareMap.get(Servo.class, "leftClimbQuick");
+//        rightClimbQuick = hardwareMap.get(Servo.class, "rightClimbQuick");
 
         //Limit Switch Setup
-        ElevatorLimit = hardwareMap.get(DigitalChannel.class, "ElevatorLimit");
-        IntakeLimit = hardwareMap.get(DigitalChannel.class, "IntakeLimit");
-        ClimbHookLeft = hardwareMap.get(DigitalChannel.class, "ClimbHookLeft");
-        ClimbHookRight = hardwareMap.get(DigitalChannel.class, "ClimbHookRight");
-        IntakePixel1 = hardwareMap.get(DigitalChannel.class, "IntakePixel1");
-        IntakePixel2 = hardwareMap.get(DigitalChannel.class, "IntakePixel2");
+//        elevatorLimit = hardwareMap.get(DigitalChannel.class, "elevatorLimit");
+//        innerPixel = hardwareMap.get(DigitalChannel.class, "innerPixel");
+//        outerPixel = hardwareMap.get(DigitalChannel.class, "outerPixel");
+//        ClimbHookLeft = hardwareMap.get(DigitalChannel.class, "ClimbHookLeft");
+//        ClimbHookRight = hardwareMap.get(DigitalChannel.class, "ClimbHookRight");
 
 //---------------------------------------------------------------------------
 
         //Initialise Servos
-        Wrist.setPosition(0);
-        openClaw.setPosition(0);
-        spinClaw.setPosition(0);
-        deployDrone.setPosition(0);
-        launchDrone.setPosition(0);
-        spinIntake.setPosition(0);
-        extendIntake.setPosition(0);
-        lockHandoff.setPosition(0);
-        leftClimbQuick.setPosition(0);
-        rightClimbQuick.setPosition(0);
+        leftArm.setPosition(leftArmStowed);
+        rightArm.setPosition(rightArmStowed);
+//        wrist.setPosition(wristStowed);
+//        spinClaw.setPosition(spinClawStowed);
+//        openClaw.setPosition(clawOpen);
+        extendIntake.setPosition(intakeStowed);
+//        deployDrone.setPosition(0);
+//        launchDrone.setPosition(0);
+//        leftClimbQuick.setPosition(0);
+//        rightClimbQuick.setPosition(0);
 
         //Initialise PIDF Loops
-        Elevator_target = 0;
-        Intake_target = 0;
-        Climb_target = 0;
-        Wrist_target = 0;
+//        elevatorTarget = 0;
+//        climbTarget = 0;
+//        wristTarget = 0;
 
 //---------------------------------------------------------------------------
 
@@ -307,15 +328,123 @@ public class A_TeleOp_APOC extends OpMode {
 
 //---------------------------------------------------------------------------
 
+        //Elevator Control
+        elevator.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        elevatorBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        elevator.setPower(-1 * gamepad2.left_stick_y);
+        elevatorBack.setPower(-1 * gamepad2.left_stick_y);
+
+        //MAX point for elevator = 3300 ticks
+
+//        if (gamepad1.a) {
+//            elevator.setTargetPosition(0);
+//            elevatorBack.setTargetPosition(0);
+//
+//            elevator.setPower(0.2);
+//            elevatorBack.setPower(0.2);
+//
+//            elevator.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            elevatorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        }
+//
+//        if (gamepad1.b) {
+//            elevator.setTargetPosition(100);
+//            elevatorBack.setTargetPosition(100);
+//
+//            elevator.setPower(0.2);
+//            elevatorBack.setPower(0.2);
+//
+//            elevator.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            elevatorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        }
+//
+//        if (gamepad1.y) {
+//            elevator.setTargetPosition(200);
+//            elevatorBack.setTargetPosition(200);
+//
+//            elevator.setPower(0.2);
+//            elevatorBack.setPower(0.2);
+//
+//            elevator.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            elevatorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        }
+//
+//        if (gamepad1.x) {
+//            elevator.setTargetPosition(300);
+//            elevatorBack.setTargetPosition(300);
+//
+//            elevator.setPower(0.2);
+//            elevatorBack.setPower(0.2);
+//
+//            elevator.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            elevatorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        }
+
+
+//---------------------------------------------------------------------------
+
+        //Intake Control
+        intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        if (gamepad1.right_bumper) {
+            extendIntake.setPosition(intakePickUp);
+            intake.setPower(1);
+        }
+
+        else {
+            extendIntake.setPosition(intakeStowed);
+            intake.setPower(0.3);
+        }
+//---------------------------------------------------------------------------
+
+        //Handoff
+
+        //Close Claw
+        if (gamepad2.left_bumper) {
+//            openClaw.setPosition(clawClosed);
+        }
+
+        //Open Claw
+        if (gamepad2.right_bumper) {
+//            openClaw.setPosition(clawOpen);
+        }
+
+        //Pickup Arm
+        if (gamepad2.a) {
+            leftArm.setPosition(leftArmPickUp);
+            rightArm.setPosition(rightArmPickUp);
+        }
+
+        //Score Arm
+        if (gamepad2.b) {
+            leftArm.setPosition(leftArmScore);
+            rightArm.setPosition(rightArmScore);
+        }
+
+        //Stow Arm
+        if (gamepad2.x) {
+            leftArm.setPosition(leftArmStowed);
+            rightArm.setPosition(rightArmStowed);
+        }
+
+//---------------------------------------------------------------------------
+
         //Update Variables
+
+        //Update previous button states
+//        previousLTriggerState = currentLTriggerState;
+//        previousRTriggerState = currentRTriggerState;
 
 //---------------------------------------------------------------------------
 
         //Telemetry Update
         //Drive Information
-        telemetry.addData("Left Stick X", gamepad1.left_stick_x);
-        telemetry.addData("Left Stick Y", gamepad1.left_stick_y);
-        telemetry.addData("Right Stick X", gamepad1.right_stick_x);
+        telemetry.addData("Left Stick X:", gamepad1.left_stick_x);
+        telemetry.addData("Left Stick Y:", gamepad1.left_stick_y);
+        telemetry.addData("Right Stick X:", gamepad1.right_stick_x);
+        telemetry.addData("Elevator:", elevator.getCurrentPosition());
+        telemetry.addData("Elevator Target:", elevator.getTargetPosition());
+        telemetry.addData("ElevatorBack:", elevatorBack.getCurrentPosition());
+        telemetry.addData("Elevator Back Target:", elevatorBack.getTargetPosition());
         //Update
         telemetry.update();
 
