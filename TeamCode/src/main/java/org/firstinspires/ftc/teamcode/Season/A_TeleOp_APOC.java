@@ -266,6 +266,17 @@ public class A_TeleOp_APOC extends OpMode {
     public void loop() {
         //Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
 
+        //Robot state variables
+        boolean Intaking = false;
+        boolean Scoring = false;
+        boolean Climbing = false;
+
+        //Trigger tracking
+        double currentLTriggerState = gamepad1.left_trigger;
+        double currentRTriggerState = gamepad1.right_trigger;
+        double current2ndLTriggerState = gamepad2.left_trigger;
+        double current2ndRTriggerState = gamepad2.right_trigger;
+
 //---------------------------------------------------------------------------
         //Variables
 
@@ -279,7 +290,7 @@ public class A_TeleOp_APOC extends OpMode {
         //Drive Control
 
         //Slow Driving
-        if (gamepad1.left_bumper) {
+        if (Intaking || Scoring || Climbing) {
             LeftStickY = -gamepad1.left_stick_y * 0.25;
             LeftStickX = gamepad1.left_stick_x * 0.25;
             RX = gamepad1.right_stick_x * 0.3;
@@ -386,11 +397,13 @@ public class A_TeleOp_APOC extends OpMode {
         //Intake Control
         intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         if (gamepad1.right_bumper) {
+            Intaking = true;
             extendIntake.setPosition(intakePickUp);
             intake.setPower(1);
         }
 
         else {
+            Intaking = false;
             extendIntake.setPosition(intakeStowed);
             intake.setPower(0.3);
         }
