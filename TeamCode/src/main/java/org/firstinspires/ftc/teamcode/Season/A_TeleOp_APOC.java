@@ -26,14 +26,16 @@ public class A_TeleOp_APOC extends OpMode {
 //---------------------------------------------------------------------------
 
     //Motor Set Points
-    int elevatorStowed = 0;
-    int elevatorLvl1 = 0;
-    int elevatorLvl2 = 0;
-    int elevatorLvl3 = 0;
+    int elevatorStowed = -500;
+    int elevatorLvl1 = -1000;
+    int elevatorLvl2 = -1500;
+    int elevatorLvl3 = -2000;
+    //Max 3300
 
-    int climbDeploy = 0;
-    int climbQuickUp = 0;
+    int climbDeploy = -2600;
+    int climbQuickUp = -2000;
     int climbRetract = 0;
+    //Max -2600
 
     //Motor Powers
     double intakeIntaking = 1;
@@ -72,22 +74,25 @@ public class A_TeleOp_APOC extends OpMode {
 //---------------------------------------------------------------------------
 
     //Elevator PIDF Variables
-//    public PIDFController elevatorController;
-//    public static double eP = 0, eI = 0, eD = 0;
-//    public static double eF = 0;
-//    public static int elevatorTarget = 0;
+    public PIDFController elevatorController;
+    public static double eP = 0.002, eI = 0.00, eD = 0.0001;
+    public static double eF = 0;
+    public static int elevatorTarget;
 
     //Climb PIDF Variables
-//    public PIDFController climbController;
-//    public static double cP = 0, cI = 0, cD = 0;
-//    public static double cF = 0;
-//    public static int climbTarget = 0;
+    public PIDFController leftClimbController;
+    public PIDFController rightClimbController;
+    public static double cP = 0.018, cI = 0.1, cD = 0.00001;
+    public static double cF = 0;
+    public static int climbTarget;
+
 
     //Wrist PIDF Variables
-//    public PIDFController wristController;
+//    public PIDFController leftWristController;
+//    public PIDFController rightWristController;
 //    public static double wP = 0, wI = 0, wD = 0;
 //    public static double wF = 0;
-//    public static int wristTarget = 0;
+//    public static int wristTarget;
 
 //---------------------------------------------------------------------------
 
@@ -125,10 +130,10 @@ public class A_TeleOp_APOC extends OpMode {
     public Servo claw;
 
     //Expansion Hub
-    public Servo deployDrone;
-    public Servo launchDrone;
     public Servo leftClimbQuick;
     public Servo rightClimbQuick;
+    public Servo deployDrone;
+    public Servo launchDrone;
 
     //Limit Switch Definition
     //Control Hub
@@ -166,7 +171,7 @@ public class A_TeleOp_APOC extends OpMode {
         //Parameters
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                 RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
-                RevHubOrientationOnRobot.UsbFacingDirection.UP));
+                RevHubOrientationOnRobot.UsbFacingDirection.DOWN));
         imu.initialize(parameters);
 
 //---------------------------------------------------------------------------
@@ -190,13 +195,15 @@ public class A_TeleOp_APOC extends OpMode {
         intake.setZeroPowerBehavior(ZeroPowerBehavior.BRAKE);
 
         //Reverse
-        rightClimb.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftClimb.setDirection(DcMotorSimple.Direction.REVERSE);
+        elevator.setDirection(DcMotorSimple.Direction.REVERSE);
 
 //---------------------------------------------------------------------------
 
         //PIDF Setup
-//        elevatorController = new PIDFController(eP, eI, eD, eF);
-//        climbController = new PIDFController(cP, cI, cD, cF);
+        elevatorController = new PIDFController(eP, eI, eD, eF);
+        leftClimbController = new PIDFController(cP, cI, cD, cF);
+        rightClimbController = new PIDFController(cP, cI, cD, cF);
 //        wristController = new PIDFController(wP, wI, wD, wF);
 
         //Servo Setup
@@ -237,7 +244,7 @@ public class A_TeleOp_APOC extends OpMode {
 
         //Initialise PIDF Loops
 //        elevatorTarget = 0;
-//        climbTarget = 0;
+        climbTarget = climbRetract;
 //        wristTarget = 0;
 
 //---------------------------------------------------------------------------
@@ -299,7 +306,28 @@ public class A_TeleOp_APOC extends OpMode {
         double current2ndRTriggerState = gamepad2.right_trigger;
 
 //---------------------------------------------------------------------------
-        //Variables
+        //PIDF Loops
+        //Elevator
+        elevatorController.setPIDF(eP, eI, eD, eF);
+        int elevatorPos = elevator.getCurrentPosition();
+        double elevatorPIDF = elevatorController.calculate(elevatorPos, elevatorTarget);
+//        elevator.setPower(elevatorPIDF);
+        elevator.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        //Left Climb
+        leftClimbController.setPIDF(cP, cI, cD, cF);
+        int leftClimbPos = leftClimb.getCurrentPosition();
+        double leftClimbPIDF = leftClimbController.calculate(leftClimbPos, climbTarget);
+//        leftClimb.setPower(leftClimbPIDF);
+        leftClimb.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        //Right Climb
+        rightClimbController.setPIDF(cP, cI, cD, cF);
+        int rightClimbPos = rightClimb.getCurrentPosition();
+        double rightClimbPIDF = rightClimbController.calculate(rightClimbPos, climbTarget);
+        rightClimb.setPower(rightClimbPIDF);
+        rightClimb.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
 
         //Driving Variables
         double LeftStickY;
@@ -313,14 +341,14 @@ public class A_TeleOp_APOC extends OpMode {
         //Slow Driving
         if (Intaking || Scoring || Climbing) {
             LeftStickY = -gamepad1.left_stick_y * 0.25;
-            LeftStickX = gamepad1.left_stick_x * 0.25;
+            LeftStickX = -gamepad1.left_stick_x * 0.25;
             RX = gamepad1.right_stick_x * 0.3;
         }
 
         //Normal Driving
         else {
             LeftStickY = -gamepad1.left_stick_y;
-            LeftStickX = gamepad1.left_stick_x;
+            LeftStickX = -gamepad1.left_stick_x;
             RX = gamepad1.right_stick_x * 0.8;
         }
 
@@ -364,42 +392,26 @@ public class A_TeleOp_APOC extends OpMode {
         elevator.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         elevator.setPower(gamepad2.right_stick_y);
 
-        //MAX point for elevator = 3300 ticks
-
         if (gamepad1.a) {
-//            Scoring = false;
-//
-//            elevator.setTargetPosition(0);
-//            elevator.setPower(0.2);
-//
-//            elevator.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            Scoring = false;
+
+            elevatorTarget = elevatorStowed;
         }
 
         if (gamepad1.b) {
-//            Scoring = true;
-//
-//            elevator.setTargetPosition(100);
-//            elevator.setPower(0.2);
-//
-//            elevator.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            Scoring = true;
+
+            elevatorTarget = elevatorLvl1;
         }
 
         if (gamepad1.y) {
-//            Scoring = true;
-//
-//            elevator.setTargetPosition(200);
-//            elevator.setPower(0.2);
-//
-//            elevator.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            Scoring = true;
+            elevatorTarget = elevatorLvl2;
         }
 
         if (gamepad1.x) {
-//            Scoring = true;
-//
-//            elevator.setTargetPosition(300);
-//            elevator.setPower(0.2);
-//
-//            elevator.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            Scoring = true;
+            elevatorTarget = elevatorLvl3;
         }
 
 //---------------------------------------------------------------------------
@@ -410,20 +422,21 @@ public class A_TeleOp_APOC extends OpMode {
         leftClimb.setPower(gamepad2.left_stick_y);
         rightClimb.setPower(gamepad2.left_stick_y);
 
-        //MAX point for climber = ??
-
-        if (gamepad2.dpad_up && gamepad2.right_bumper) {
-//            Climbing = true;
-//            climb.setTargetPosition(300);
+        if (gamepad2.x //gamepad2.dpad_up && gamepad2.right_bumper
+         ) {
+            Climbing = true;
+            climbTarget = climbDeploy;
         }
 
-        if (gamepad2.dpad_down && Climbing) {
-//            climb.setTargetPosition(200);
+        if (gamepad2.b //gamepad2.dpad_down && Climbing
+        ) {
+            climbTarget = climbQuickUp;
         }
 
-        if (gamepad2.dpad_right && Climbing) {
-//            Climbing = false;
-//            climb.setTargetPosition(0);
+        if (gamepad2.a //gamepad2.dpad_right && Climbing
+        ) {
+            Climbing = false;
+            climbTarget = climbRetract;
         }
 
 //---------------------------------------------------------------------------
@@ -497,6 +510,12 @@ public class A_TeleOp_APOC extends OpMode {
         telemetry.addData("Right Stick X:", gamepad1.right_stick_x);
         telemetry.addData("Elevator:", elevator.getCurrentPosition());
         telemetry.addData("Elevator Target:", elevator.getTargetPosition());
+        telemetry.addData("Left Climb:", leftClimb.getCurrentPosition());
+        telemetry.addData("Right Climb:", rightClimb.getCurrentPosition());
+        telemetry.addData("Climb Target:", climbTarget);
+        telemetry.addData("Intaking", Intaking);
+        telemetry.addData("Scoring", Scoring);
+        telemetry.addData("Climbing", Climbing);
         //Update
         telemetry.update();
 
