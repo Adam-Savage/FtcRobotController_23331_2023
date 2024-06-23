@@ -42,9 +42,9 @@ public class A_TeleOp_APOC extends OpMode {
     double intakeHold = 0.3;
 
     //Servo Set Points
-    double leftArmStowed = 0.1;
-    double leftArmPickUp = 0;
-    double leftArmScore = 0.6;
+    double leftArmStowed = 0.6; //0.8
+    double leftArmPickUp = 0.9;
+    double leftArmScore = 0.2;
     double rightArmStowed = 1 - leftArmStowed;
     double rightArmPickUp = 1 - leftArmPickUp;
     double rightArmScore = 1 - leftArmScore;
@@ -53,15 +53,15 @@ public class A_TeleOp_APOC extends OpMode {
     double wristScore = 0;
     double wristScoreLow = 0;
 
-    double spinClawStowed = 0;
-    double spinClawLeft = 0;
-    double spinClawLeft45 = 0;
+    double spinClawStowed = 0.6;
+    double spinClawLeft = 1;
+    double spinClawLeft45 = 0.77;
     double spinClawRight = 0;
-    double spinClawRight45 = 0;
+    double spinClawRight45 = 0.4;
 
-    double clawOpen = 0;
-    double clawClosed = 0;
-    double clawClosed1Pixel = 0;
+    double clawOpen = 0.7;
+    double clawClosed = 0.85;
+    double clawClosed1Pixel = 0.9;
 
     double intakeStowed = 0;
     double intakePickUp = 0.4;
@@ -171,7 +171,7 @@ public class A_TeleOp_APOC extends OpMode {
         //Parameters
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                 RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
-                RevHubOrientationOnRobot.UsbFacingDirection.DOWN));
+                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD));
         imu.initialize(parameters);
 
 //---------------------------------------------------------------------------
@@ -208,16 +208,16 @@ public class A_TeleOp_APOC extends OpMode {
 
         //Servo Setup
         extendIntake = hardwareMap.get(Servo.class, "extendIntake");
-        leftArm = hardwareMap.get(Servo.class, "leftArm");
-        rightArm = hardwareMap.get(Servo.class, "rightArm");
-        wrist = hardwareMap.get(Servo.class, "wrist");
-        spinClaw = hardwareMap.get(Servo.class, "spinClaw");
-        claw = hardwareMap.get(Servo.class, "claw");
-
         leftClimbQuick = hardwareMap.get(Servo.class, "leftClimbQuick");
-        rightClimbQuick = hardwareMap.get(Servo.class, "rightClimbQuick");
         deployDrone = hardwareMap.get(Servo.class, "deployDrone");
         launchDrone = hardwareMap.get(Servo.class, "launchDrone");
+
+        leftArm = hardwareMap.get(Servo.class, "leftArm");
+        rightArm = hardwareMap.get(Servo.class, "rightArm");
+        wrist = hardwareMap.get(Servo.class, "rightClimbQuick");
+        spinClaw = hardwareMap.get(Servo.class, "spinClaw");
+        claw = hardwareMap.get(Servo.class, "claw");
+        rightClimbQuick = hardwareMap.get(Servo.class, "rightClimbQuick");
 
         //Limit Switch Setup
         hookLeft = hardwareMap.get(DigitalChannel.class, "hookLeft");
@@ -243,7 +243,7 @@ public class A_TeleOp_APOC extends OpMode {
         launchDrone.setPosition(0);
 
         //Initialise PIDF Loops
-//        elevatorTarget = 0;
+        elevatorTarget = 0;
         climbTarget = climbRetract;
 //        wristTarget = 0;
 
@@ -269,6 +269,11 @@ public class A_TeleOp_APOC extends OpMode {
 //---------------------------------------------------------------------------
 
         //code here
+
+//        spinClaw.setPosition(spinClawStowed);
+//        wrist.setPosition(wristStowed);
+//        leftArm.setPosition(leftArmStowed);
+//        rightArm.setPosition(rightArmStowed);
 
 //---------------------------------------------------------------------------
 
@@ -325,7 +330,7 @@ public class A_TeleOp_APOC extends OpMode {
         rightClimbController.setPIDF(cP, cI, cD, cF);
         int rightClimbPos = rightClimb.getCurrentPosition();
         double rightClimbPIDF = rightClimbController.calculate(rightClimbPos, climbTarget);
-        rightClimb.setPower(rightClimbPIDF);
+//        rightClimb.setPower(rightClimbPIDF);
         rightClimb.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
@@ -339,18 +344,18 @@ public class A_TeleOp_APOC extends OpMode {
         //Drive Control
 
         //Slow Driving
-        if (Intaking || Scoring || Climbing) {
-            LeftStickY = -gamepad1.left_stick_y * 0.25;
-            LeftStickX = -gamepad1.left_stick_x * 0.25;
-            RX = gamepad1.right_stick_x * 0.3;
-        }
+//        if (Intaking || Scoring || Climbing) {
+//            LeftStickY = gamepad1.left_stick_y * 0.25;
+//            LeftStickX = gamepad1.left_stick_x * 0.25;
+//            RX = gamepad1.right_stick_x * 0.3;
+//        }
 
         //Normal Driving
-        else {
+//        else {
             LeftStickY = -gamepad1.left_stick_y;
             LeftStickX = -gamepad1.left_stick_x;
             RX = gamepad1.right_stick_x * 0.8;
-        }
+//        }
 
 //---------------------------------------------------------------------------
 
@@ -459,33 +464,35 @@ public class A_TeleOp_APOC extends OpMode {
 
         //Handoff
 
-        //Close Claw
-        if (gamepad2.left_bumper) {
-//            openClaw.setPosition(clawClosed);
-        }
+        wrist.setPosition(gamepad2.left_trigger);
 
-        //Open Claw
-        if (gamepad2.right_bumper) {
-//            openClaw.setPosition(clawOpen);
-        }
-
-        //Pickup Arm
-        if (gamepad2.a) {
-            leftArm.setPosition(leftArmPickUp);
-            rightArm.setPosition(rightArmPickUp);
-        }
-
-        //Score Arm
-        if (gamepad2.b) {
-            leftArm.setPosition(leftArmScore);
-            rightArm.setPosition(rightArmScore);
-        }
-
-        //Stow Arm
-        if (gamepad2.x) {
-            leftArm.setPosition(leftArmStowed);
-            rightArm.setPosition(rightArmStowed);
-        }
+//        //Close Claw
+//        if (gamepad2.left_bumper) {
+////            openClaw.setPosition(clawClosed);
+//        }
+//
+//        //Open Claw
+//        if (gamepad2.right_bumper) {
+////            openClaw.setPosition(clawOpen);
+//        }
+//
+//        //Pickup Arm
+//        if (gamepad2.a) {
+//            leftArm.setPosition(leftArmPickUp);
+//            rightArm.setPosition(rightArmPickUp);
+//        }
+//
+//        //Score Arm
+//        if (gamepad2.b) {
+//            leftArm.setPosition(leftArmScore);
+//            rightArm.setPosition(rightArmScore);
+//        }
+//
+//        //Stow Arm
+//        if (gamepad2.x) {
+//            leftArm.setPosition(leftArmStowed);
+//            rightArm.setPosition(rightArmStowed);
+//        }
 
 //---------------------------------------------------------------------------
 
@@ -505,17 +512,27 @@ public class A_TeleOp_APOC extends OpMode {
 
         //Telemetry Update
         //Drive Information
-        telemetry.addData("Left Stick X:", gamepad1.left_stick_x);
-        telemetry.addData("Left Stick Y:", gamepad1.left_stick_y);
-        telemetry.addData("Right Stick X:", gamepad1.right_stick_x);
-        telemetry.addData("Elevator:", elevator.getCurrentPosition());
-        telemetry.addData("Elevator Target:", elevator.getTargetPosition());
-        telemetry.addData("Left Climb:", leftClimb.getCurrentPosition());
-        telemetry.addData("Right Climb:", rightClimb.getCurrentPosition());
-        telemetry.addData("Climb Target:", climbTarget);
-        telemetry.addData("Intaking", Intaking);
-        telemetry.addData("Scoring", Scoring);
-        telemetry.addData("Climbing", Climbing);
+        telemetry.addData("Yaw: ", imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS));
+        telemetry.addData("Roll: ", imu.getRobotYawPitchRollAngles().getRoll(AngleUnit.RADIANS));
+        telemetry.addData("Pitch: ", imu.getRobotYawPitchRollAngles().getPitch(AngleUnit.RADIANS));
+
+        telemetry.addData("Left Arm Pos: ", leftArm.getPosition());
+        telemetry.addData("Right Arm Pos", rightArm.getPosition());
+        telemetry.addData("Wrist Pos:", wrist.getPosition());
+        telemetry.addData("Spin Claw Pos: ", spinClaw.getPosition());
+        telemetry.addData("Claw Pos: ", claw.getPosition());
+
+//        telemetry.addData("Left Stick X:", gamepad1.left_stick_x);
+//        telemetry.addData("Left Stick Y:", gamepad1.left_stick_y);
+//        telemetry.addData("Right Stick X:", gamepad1.right_stick_x);
+//        telemetry.addData("Elevator:", elevator.getCurrentPosition());
+//        telemetry.addData("Elevator Target:", elevator.getTargetPosition());
+//        telemetry.addData("Left Climb:", leftClimb.getCurrentPosition());
+//        telemetry.addData("Right Climb:", rightClimb.getCurrentPosition());
+//        telemetry.addData("Climb Target:", climbTarget);
+//        telemetry.addData("Intaking", Intaking);
+//        telemetry.addData("Scoring", Scoring);
+//        telemetry.addData("Climbing", Climbing);
         //Update
         telemetry.update();
 
