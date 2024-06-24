@@ -39,18 +39,18 @@ public class A_TeleOp_APOC extends OpMode {
 
     //Motor Powers
     double intakeIntaking = 1;
-    double intakeHold = 0.3;
+    double intakeHold = 0.4;
 
     //Servo Set Points
-    double leftArmStowed = 0.6; //0.8
-    double leftArmPickUp = 0.9;
+    double leftArmStowed = 0.76w;
+    double leftArmPickUp = 0.8;
     double leftArmScore = 0.2;
     double rightArmStowed = 1 - leftArmStowed;
     double rightArmPickUp = 1 - leftArmPickUp;
     double rightArmScore = 1 - leftArmScore;
 
-    double wristStowed = 0;
-    double wristScore = 0;
+    double wristStowed = 0.6;
+    double wristScore = 0.3;
     double wristScoreLow = 0;
 
     double spinClawStowed = 0.6;
@@ -59,8 +59,8 @@ public class A_TeleOp_APOC extends OpMode {
     double spinClawRight = 0;
     double spinClawRight45 = 0.4;
 
-    double clawOpen = 0.7;
-    double clawClosed = 0.85;
+    double clawOpen = 0.6;
+    double clawClosed = 0.87;
     double clawClosed1Pixel = 0.9;
 
     double intakeStowed = 0;
@@ -165,14 +165,14 @@ public class A_TeleOp_APOC extends OpMode {
 
 //---------------------------------------------------------------------------
 
-        //IMU Declaration
-        IMU imu = hardwareMap.get(IMU.class, "imu");
-
-        //Parameters
-        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
-                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD));
-        imu.initialize(parameters);
+//        //IMU Declaration
+//        IMU imu = hardwareMap.get(IMU.class, "imu");
+//
+//        //Parameters
+//        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+//                RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
+//                RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD));
+//        imu.initialize(parameters);
 
 //---------------------------------------------------------------------------
 
@@ -214,7 +214,7 @@ public class A_TeleOp_APOC extends OpMode {
 
         leftArm = hardwareMap.get(Servo.class, "leftArm");
         rightArm = hardwareMap.get(Servo.class, "rightArm");
-        wrist = hardwareMap.get(Servo.class, "rightClimbQuick");
+        wrist = hardwareMap.get(Servo.class, "wrist");
         spinClaw = hardwareMap.get(Servo.class, "spinClaw");
         claw = hardwareMap.get(Servo.class, "claw");
         rightClimbQuick = hardwareMap.get(Servo.class, "rightClimbQuick");
@@ -231,8 +231,8 @@ public class A_TeleOp_APOC extends OpMode {
 
         //Initialise Servos
         extendIntake.setPosition(intakeStowed);
-        leftArm.setPosition(leftArmStowed);
-        rightArm.setPosition(rightArmStowed);
+        leftArm.setPosition(leftArmPickUp);
+        rightArm.setPosition(rightArmPickUp);
         wrist.setPosition(wristStowed);
         spinClaw.setPosition(spinClawStowed);
         claw.setPosition(clawOpen);
@@ -352,40 +352,60 @@ public class A_TeleOp_APOC extends OpMode {
 
         //Normal Driving
 //        else {
-            LeftStickY = -gamepad1.left_stick_y;
-            LeftStickX = -gamepad1.left_stick_x;
-            RX = gamepad1.right_stick_x * 0.8;
+//            LeftStickY = -gamepad1.left_stick_y;
+//            LeftStickX = -gamepad1.left_stick_x;
+//            RX = gamepad1.right_stick_x * 0.8;
 //        }
 
 //---------------------------------------------------------------------------
 
         //Field Centric Drive
 
-        IMU imu = hardwareMap.get(IMU.class, "imu");
+//        IMU imu = hardwareMap.get(IMU.class, "imu");
+//
+//        //Reset IMU when START Pressed
+//        if (gamepad1.options) {
+//            imu.resetYaw();
+//        }
+//
+//        //Get robot facing direction
+//        double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+//
+//        //Calculate rotation
+//        double rotX = LeftStickX * Math.cos(-botHeading) - LeftStickY * Math.sin(-botHeading);
+//        double rotY = LeftStickX * Math.sin(-botHeading) + LeftStickY * Math.cos(-botHeading);
+//
+//        //Strafing Correction
+//        rotX = rotX * 1.2;
+//
+//        //Maths for individual motor control
+//        double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(RX), 1);
+//        double frontLeftPower = (rotY + rotX + RX) / denominator;
+//        double backLeftPower = (rotY - rotX + RX) / denominator;
+//        double frontRightPower = (rotY - rotX - RX) / denominator;
+//        double backRightPower = (rotY + rotX - RX) / denominator;
+//
+//        //Set Powers
+//        frontLeft.setPower(frontLeftPower);
+//        backLeft.setPower(backLeftPower);
+//        frontRight.setPower(frontRightPower);
+//        backRight.setPower(backRightPower);
 
-        //Reset IMU when START Pressed
-        if (gamepad1.options) {
-            imu.resetYaw();
-        }
+        //Robot centric drive
 
-        //Get robot facing direction
-        double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        double y = -gamepad1.left_stick_y; // Remember, Y stick value is reversed
+        double x = -gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
+        double rx = gamepad1.right_stick_x;
 
-        //Calculate rotation
-        double rotX = LeftStickX * Math.cos(-botHeading) - LeftStickY * Math.sin(-botHeading);
-        double rotY = LeftStickX * Math.sin(-botHeading) + LeftStickY * Math.cos(-botHeading);
+        // Denominator is the largest motor power (absolute value) or 1
+        // This ensures all the powers maintain the same ratio,
+        // but only if at least one is out of the range [-1, 1]
+        double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+        double frontLeftPower = (y + x + rx) / denominator;
+        double backLeftPower = (y - x + rx) / denominator;
+        double frontRightPower = (y - x - rx) / denominator;
+        double backRightPower = (y + x - rx) / denominator;
 
-        //Strafing Correction
-        rotX = rotX * 1.2;
-
-        //Maths for individual motor control
-        double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(RX), 1);
-        double frontLeftPower = (rotY + rotX + RX) / denominator;
-        double backLeftPower = (rotY - rotX + RX) / denominator;
-        double frontRightPower = (rotY - rotX - RX) / denominator;
-        double backRightPower = (rotY + rotX - RX) / denominator;
-
-        //Set Powers
         frontLeft.setPower(frontLeftPower);
         backLeft.setPower(backLeftPower);
         frontRight.setPower(frontRightPower);
@@ -464,35 +484,51 @@ public class A_TeleOp_APOC extends OpMode {
 
         //Handoff
 
-        wrist.setPosition(gamepad2.left_trigger);
+        //Close Claw
+        if (gamepad2.left_bumper) {
+            claw.setPosition(clawClosed);
+        }
 
-//        //Close Claw
-//        if (gamepad2.left_bumper) {
-////            openClaw.setPosition(clawClosed);
-//        }
-//
-//        //Open Claw
-//        if (gamepad2.right_bumper) {
-////            openClaw.setPosition(clawOpen);
-//        }
-//
-//        //Pickup Arm
-//        if (gamepad2.a) {
-//            leftArm.setPosition(leftArmPickUp);
-//            rightArm.setPosition(rightArmPickUp);
-//        }
-//
-//        //Score Arm
-//        if (gamepad2.b) {
-//            leftArm.setPosition(leftArmScore);
-//            rightArm.setPosition(rightArmScore);
-//        }
-//
-//        //Stow Arm
-//        if (gamepad2.x) {
-//            leftArm.setPosition(leftArmStowed);
-//            rightArm.setPosition(rightArmStowed);
-//        }
+        //Open Claw
+        if (gamepad2.right_bumper) {
+            claw.setPosition(clawOpen);
+        }
+
+        if (gamepad2.dpad_left) {
+            spinClaw.setPosition(spinClawLeft);
+        }
+
+        if (gamepad2.dpad_up) {
+            spinClaw.setPosition(spinClawStowed);
+        }
+
+        if (gamepad2.dpad_right) {
+            spinClaw.setPosition(spinClawRight);
+        }
+
+        //Pickup Arm
+        if (gamepad2.a) {
+            leftArm.setPosition(leftArmPickUp);
+            rightArm.setPosition(rightArmPickUp);
+            wrist.setPosition(wristStowed);
+            claw.setPosition(clawOpen);
+        }
+
+        //Stow Arm
+        if (gamepad2.b) {
+            leftArm.setPosition(leftArmStowed);
+            rightArm.setPosition(rightArmStowed);
+            wrist.setPosition(wristStowed);
+            claw.setPosition(clawClosed);
+        }
+
+        //Score Arm
+        if (gamepad2.y) {
+            leftArm.setPosition(leftArmScore);
+            rightArm.setPosition(rightArmScore);
+            wrist.setPosition(wristScore);
+            claw.setPosition(clawClosed);
+        }
 
 //---------------------------------------------------------------------------
 
@@ -512,9 +548,9 @@ public class A_TeleOp_APOC extends OpMode {
 
         //Telemetry Update
         //Drive Information
-        telemetry.addData("Yaw: ", imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS));
-        telemetry.addData("Roll: ", imu.getRobotYawPitchRollAngles().getRoll(AngleUnit.RADIANS));
-        telemetry.addData("Pitch: ", imu.getRobotYawPitchRollAngles().getPitch(AngleUnit.RADIANS));
+//        telemetry.addData("Yaw: ", imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS));
+//        telemetry.addData("Roll: ", imu.getRobotYawPitchRollAngles().getRoll(AngleUnit.RADIANS));
+//        telemetry.addData("Pitch: ", imu.getRobotYawPitchRollAngles().getPitch(AngleUnit.RADIANS));
 
         telemetry.addData("Left Arm Pos: ", leftArm.getPosition());
         telemetry.addData("Right Arm Pos", rightArm.getPosition());
